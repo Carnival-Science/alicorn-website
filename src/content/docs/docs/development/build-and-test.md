@@ -29,9 +29,9 @@ To build and run the native hello example:
 ~~~
 
 The repository's
-[Getting Started guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/getting-started.md)
+[Getting Started guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/getting-started.md)
 lists the full platform toolchain. The
-[contributor guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/development.md)
+[contributor guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/development.md)
 covers focused suites, host fixtures, diagnostics, and packaging.
 
 ## Keep validation claims specific

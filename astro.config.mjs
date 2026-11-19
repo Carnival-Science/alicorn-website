@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-const repository = 'https://github.com/samanshaiza004/alicorn';
+const repository = 'https://github.com/Carnival-Science/Alicorn';
 
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || undefined,

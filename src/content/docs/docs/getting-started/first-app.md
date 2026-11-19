@@ -8,7 +8,7 @@ The shortest route is the repository's native starter. After installing the
 you have not already:
 
 ~~~sh
-git clone https://github.com/samanshaiza004/alicorn.git
+git clone https://github.com/Carnival-Science/Alicorn.git
 cd alicorn
 ~~~
 

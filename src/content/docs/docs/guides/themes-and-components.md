@@ -15,7 +15,7 @@ looks. The control's semantic role, label, value, actions, and state remain
 owned by the UI description.
 
 For a quick start, see
-[the typed theme guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/themes.md)
+[the typed theme guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/themes.md)
 and the theme compiler under <code>theme/</code>.
 
 ## Compose a custom control
@@ -28,9 +28,9 @@ input lifecycle.
 
 The repository's custom-control examples and tests are the best guide to the
 current API. Start at
-[examples](https://github.com/samanshaiza004/alicorn/tree/master/examples)
+[examples](https://github.com/Carnival-Science/Alicorn/tree/master/examples)
 and read the
-[API reference](https://github.com/samanshaiza004/alicorn/blob/master/docs/reference.md)
+[API reference](https://github.com/Carnival-Science/Alicorn/blob/master/docs/reference.md)
 before depending on a lower-level contract.
 
 ## Keep theme requirements visible

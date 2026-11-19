@@ -18,7 +18,7 @@ on_wake :: proc(app: ^App, ctx: ui.Application_Context) {
 
 Adopt synchronized worker data before invalidating. The native host then
 describes the updated application state. See the
-[Async List example](https://github.com/samanshaiza004/alicorn/blob/master/examples/03_async_list/main.odin)
+[Async List example](https://github.com/Carnival-Science/Alicorn/blob/master/examples/03_async_list/main.odin)
 for a complete worker and wake lifecycle.
 
 ## Give repeated items stable keys
@@ -38,5 +38,5 @@ a stale revision intentionally keeps stale output, so the revision must reflect
 the data that determines the region's description.
 
 The complete contracts and examples are in
-[the application guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/guide.md)
-and [the architecture overview](https://github.com/samanshaiza004/alicorn/blob/master/docs/architecture.md).
+[the application guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/guide.md)
+and [the architecture overview](https://github.com/Carnival-Science/Alicorn/blob/master/docs/architecture.md).

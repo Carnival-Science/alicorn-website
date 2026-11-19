@@ -16,7 +16,7 @@ into the existing runtime. Your application keeps domain state and handles
 the result of user actions.
 
 The
-[API reference](https://github.com/samanshaiza004/alicorn/blob/master/docs/reference.md)
+[API reference](https://github.com/Carnival-Science/Alicorn/blob/master/docs/reference.md)
 lists the public surface and migration boundaries.
 
 ## Retained motion
@@ -26,7 +26,7 @@ target layout and hit geometry stable. Motion can be interrupted and retargeted;
 the host schedules presentation-only work while a response is active.
 
 Explore <code>examples/09_retained_motion</code> in the
-[repository](https://github.com/samanshaiza004/alicorn/tree/master/examples/09_retained_motion).
+[repository](https://github.com/Carnival-Science/Alicorn/tree/master/examples/09_retained_motion).
 
 ## Large collections
 
@@ -35,12 +35,12 @@ creating a UI node for every logical item. Give rows stable keys so identity
 survives changes in ordering and visibility.
 
 See <code>examples/03_async_list</code> and the other numbered lessons in the
-[examples directory](https://github.com/samanshaiza004/alicorn/tree/master/examples).
+[examples directory](https://github.com/Carnival-Science/Alicorn/tree/master/examples).
 
 ## Explore the source
 
-- [Getting Started](https://github.com/samanshaiza004/alicorn/blob/master/docs/getting-started.md)
-- [Progressive application guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/guide.md)
-- [Typed themes](https://github.com/samanshaiza004/alicorn/blob/master/docs/themes.md)
-- [Native packaging](https://github.com/samanshaiza004/alicorn/blob/master/docs/packaging.md)
-- [Example index](https://github.com/samanshaiza004/alicorn/blob/master/examples/README.md)
+- [Getting Started](https://github.com/Carnival-Science/Alicorn/blob/master/docs/getting-started.md)
+- [Progressive application guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/guide.md)
+- [Typed themes](https://github.com/Carnival-Science/Alicorn/blob/master/docs/themes.md)
+- [Native packaging](https://github.com/Carnival-Science/Alicorn/blob/master/docs/packaging.md)
+- [Example index](https://github.com/Carnival-Science/Alicorn/blob/master/examples/README.md)

@@ -1,7 +1,7 @@
 /**
  * Shared Alicorn facts and links for the portal and documentation chrome.
  */
-export const repository = 'https://github.com/samanshaiza004/alicorn';
+export const repository = 'https://github.com/Carnival-Science/Alicorn';
 export const alikitRepository = 'https://github.com/samanshaiza004/alicorn-kit';
 
 export const site = {

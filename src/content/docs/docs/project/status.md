@@ -24,8 +24,8 @@ covers Windows and macOS, and accessibility validation is representative,
 not comprehensive.
 
 These boundaries can change. Read the current
-[validation index](https://github.com/samanshaiza004/alicorn/tree/master/docs/validation)
-and [release notes](https://github.com/samanshaiza004/alicorn/blob/master/CHANGELOG.md)
+[validation index](https://github.com/Carnival-Science/Alicorn/tree/master/docs/validation)
+and [release notes](https://github.com/Carnival-Science/Alicorn/blob/master/CHANGELOG.md)
 before making a support decision.
 
 ## Contribute
@@ -34,6 +34,6 @@ Reproducible bug reports and focused contributions are welcome. Include the
 operating system, compiler revision, build command, and a minimal reproduction
 when reporting native or runtime behavior.
 
-[Source repository](https://github.com/samanshaiza004/alicorn) ·
-[Open an issue](https://github.com/samanshaiza004/alicorn/issues) ·
-[Contributing guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/development.md)
+[Source repository](https://github.com/Carnival-Science/Alicorn) ·
+[Open an issue](https://github.com/Carnival-Science/Alicorn/issues) ·
+[Contributing guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/development.md)

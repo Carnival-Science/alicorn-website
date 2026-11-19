@@ -13,7 +13,7 @@ Install the complete Odin distribution from the
 Keep the compiler together with its <code>base</code>, <code>core</code>, and
 <code>vendor</code> directories. The project documents its current tested
 compiler baseline in the
-[repository getting-started guide](https://github.com/samanshaiza004/alicorn/blob/master/docs/getting-started.md).
+[repository getting-started guide](https://github.com/Carnival-Science/Alicorn/blob/master/docs/getting-started.md).
 
 Check the compiler from a new terminal:
 
@@ -43,7 +43,7 @@ The native AccessKit integration is currently Windows/macOS only. See
 Clone the project and run the headless checks:
 
 ~~~sh
-git clone https://github.com/samanshaiza004/alicorn.git
+git clone https://github.com/Carnival-Science/Alicorn.git
 cd alicorn
 ./tools/check.sh
 ~~~

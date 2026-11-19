@@ -29,12 +29,12 @@ availability, or focus.
 Reduced motion, increased contrast, text scale, and non-color differentiation
 are inputs that application authors should include in their visual review.
 The platform matrix and detailed caveats are recorded in the
-[repository acceptance report](https://github.com/samanshaiza004/alicorn/blob/master/docs/validation/issue-103-final.md).
+[repository acceptance report](https://github.com/Carnival-Science/Alicorn/blob/master/docs/validation/issue-103-final.md).
 
 ## Report gaps
 
 Alicorn is experimental. If a control's semantics or platform behavior is
 unclear, compare it with the
-[semantic API documentation](https://github.com/samanshaiza004/alicorn/blob/master/docs/guide.md)
+[semantic API documentation](https://github.com/Carnival-Science/Alicorn/blob/master/docs/guide.md)
 and file a reproducible report in
-[GitHub Issues](https://github.com/samanshaiza004/alicorn/issues).
+[GitHub Issues](https://github.com/Carnival-Science/Alicorn/issues).
