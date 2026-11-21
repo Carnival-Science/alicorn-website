@@ -12,6 +12,12 @@ effort around direct procedural authoring with retained runtime execution.
 - A high-level <code>alicorn:ui</code> entry point and lower-level runtime API.
 - A native SDL3 / SDL_GPU host with input, layout, text, paint, and retained
   identity.
+- An opt-in WebGPU renderer for native SDL3 hosts and Chromium-family browser
+  targets. SDL_GPU remains the default and the parity reference.
+- Host services for menus, integrated titlebar chrome, dialogs, deferred close,
+  scheduling, clipboard, file drag-and-drop, and secondary windows.
+- Surface-local positioned text, per-corner surfaces, gradients, and bounded
+  shape primitives.
 - Typed themes, common controls, virtualized collections, retained motion,
   semantics, and diagnostic tooling.
 - Windows and macOS native host validation.

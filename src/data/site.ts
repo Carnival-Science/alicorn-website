@@ -26,7 +26,7 @@ export const channels = [
 
 export const facts = [
   { label: 'LANGUAGE', value: 'Odin' },
-  { label: 'NATIVE HOST', value: 'SDL3 · SDL_GPU' },
+  { label: 'NATIVE HOST', value: 'SDL3 · SDL_GPU (+ WebGPU)' },
   { label: 'STATE', value: 'Owned by your application' },
   { label: 'RUNTIME', value: 'Retained · dirty-driven' },
   { label: 'MATURITY', value: 'Experimental' },
