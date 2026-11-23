@@ -1,0 +1,136 @@
+---
+/**
+ * A live AliKit component: the component's own example, compiled to WebAssembly
+ * and drawn with Alicorn's WebGPU renderer (see src/lib/alicorn-embed.ts). The
+ * native capture shows until the demo is running, and stays when the browser
+ * has no WebGPU.
+ */
+import { withBase } from '../lib/paths';
+
+interface Props {
+  /** Catalog slug of the demo, for example `segmented`. */
+  id: string;
+  /** Path of the native capture under public/, used as the poster. */
+  capture?: string;
+  /** Height of the demo area in pixels. */
+  height?: number;
+}
+
+const { id, capture, height = 440 } = Astro.props;
+const poster = capture ? withBase('/' + capture.replace(/^\//, '')) : undefined;
+---
+
+<figure class="demo" data-demo-root={id} style={`--demo-height:${height}px`}>
+  <div class="demo-frame">
+    <canvas class="demo-canvas" data-demo-canvas hidden aria-label={`Live ${id} demo`}></canvas>
+    {poster && <img class="demo-poster" data-demo-poster src={poster} alt="" aria-hidden="true" />}
+  </div>
+  <figcaption class="demo-meta">
+    <span class="demo-lamp" data-demo-lamp aria-hidden="true"></span>
+    <span class="demo-label">Live WebGPU preview</span>
+    <span class="demo-status" aria-live="polite" data-demo-status>waiting</span>
+    <span class="demo-hint">Click the preview, then use Tab and the arrow keys.</span>
+  </figcaption>
+</figure>
+
+<script>
+  import { startEmbed, webgpuAvailable } from '../lib/alicorn-embed';
+
+  const root = document.querySelector<HTMLElement>('[data-demo-root]');
+  if (root) {
+    const id = root.dataset.demoRoot!;
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-demo-canvas]')!;
+    const poster = root.querySelector<HTMLElement>('[data-demo-poster]');
+    const lamp = root.querySelector<HTMLElement>('[data-demo-lamp]')!;
+    const statusEl = root.querySelector<HTMLElement>('[data-demo-status]')!;
+    const status = (text: string) => {
+      statusEl.textContent = text;
+      // the host reports "running" once the device is up and the first frame is drawn
+      if (text === 'running') {
+        poster?.setAttribute('hidden', '');
+        lamp.dataset.state = 'live';
+      }
+    };
+    const fail = (text: string) => { lamp.dataset.state = 'error'; status(text); };
+
+    const run = async () => {
+      if (!(await webgpuAvailable())) {
+        lamp.dataset.state = 'off';
+        status(isSecureContext ? 'WebGPU unavailable · showing the native capture' : 'needs a secure context');
+        return;
+      }
+      const controller = new AbortController();
+      addEventListener('pagehide', () => controller.abort(), { once: true });
+      try {
+        canvas.hidden = false;
+        await startEmbed({ demo: id, canvas, signal: controller.signal, status, error: fail });
+      } catch (error) {
+        canvas.hidden = true;
+        fail('failed: ' + (error instanceof Error ? error.message : 'unknown'));
+      }
+    };
+
+    // Fetch the app once the preview is near the screen, not before.
+    if (root.getBoundingClientRect().top < innerHeight * 1.5) {
+      void run();
+    } else {
+      status('scroll to start');
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        void run();
+      }, { rootMargin: '200px' });
+      observer.observe(root);
+    }
+  }
+</script>
+
+<style>
+  .demo { margin: 1.25rem 0 1.75rem; }
+  .demo-frame {
+    position: relative;
+    height: var(--demo-height);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 6px;
+    background: #10151b;
+    overflow: hidden;
+  }
+  .demo-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+  .demo-canvas:focus-visible { box-shadow: inset 0 0 0 2px var(--sl-color-accent); }
+  .demo-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+    pointer-events: none;
+  }
+  .demo-poster[hidden] { display: none; }
+  .demo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.9rem;
+    margin-top: 0.55rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+  .demo-label { color: var(--sl-color-gray-2); }
+  .demo-status { flex: 1; min-width: 0; font-family: var(--sl-font-mono); }
+  .demo-lamp {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--sl-color-gray-4);
+  }
+  .demo-lamp[data-state='live'] { background: #3fb67a; }
+  .demo-lamp[data-state='error'] { background: #d2483f; }
+  .demo-hint { display: none; }
+  @media (min-width: 50rem) { .demo-hint { display: inline; } }
+</style>

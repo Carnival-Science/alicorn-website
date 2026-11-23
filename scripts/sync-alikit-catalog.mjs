@@ -80,6 +80,48 @@ async function fetchBytes(path) {
   return Buffer.from(await response.arrayBuffer());
 }
 
+/**
+ * Height in pixels of the live demo on each page. The demos are the AliKit
+ * examples running in the browser (stage/kit); a page without an entry has no
+ * demo, and keeps its native capture alone.
+ */
+const demoHeights = {
+  'command-palette': 440,
+  'data-grid': 480,
+  'icon-picker': 480,
+  menu: 360,
+  notices: 440,
+  'palette-parts': 420,
+  progress: 480,
+  'radio-group': 440,
+  segmented: 340,
+  sidebar: 440,
+  table: 480,
+  'tree-view': 420,
+};
+
+/**
+ * Put the live WebGPU demo ahead of the native capture. AliKit's page ends its
+ * preview with a note that the interactive preview is a later step; the demo
+ * is that step, so the note goes.
+ */
+function withDemo(text, slug) {
+  const height = demoHeights[slug];
+  if (!height) return text;
+  const capture = /<Capture src="(captures\/[a-z0-9-]+\.png)"/i.exec(text);
+  const note = /<div class="preview-note">[\s\S]*?<\/div>\n?/;
+  const importLine = "import Capture from '../../../components/Capture.astro';";
+  if (!capture || !note.test(text) || !text.includes(importLine)) {
+    console.warn(`warn: ${slug} has an unexpected preview section; no demo added`);
+    return text;
+  }
+  const demo = `<ComponentDemo id="${slug}" capture="${capture[1]}" height={${height}} />\n\n`;
+  return text
+    .replace(importLine, `${importLine}\nimport ComponentDemo from '../../../components/ComponentDemo.astro';`)
+    .replace(note, '')
+    .replace(/<Capture /, `${demo}<Capture `);
+}
+
 function within(text) {
   for (const [from, to] of rewrites) text = text.split(from).join(to);
   return text;
@@ -127,7 +169,7 @@ for (const [index, component] of components.entries()) {
   const page = await fetchText(`${sourceRoot}/src/content/docs/components/${slug}.mdx`);
   outputs.push({
     path: posix.join('src/content/docs/components', `${slug}.mdx`),
-    contents: withSidebar(page, `sidebar:\n  order: ${index + 1}`),
+    contents: withSidebar(withDemo(page, slug), `sidebar:\n  order: ${index + 1}`),
   });
 
   // The page is the authority for its preview; the manifest `capture` field is

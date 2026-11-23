@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:progress</code> presents determinate or indeterminate work. A determinate bar
@@ -16,11 +17,10 @@ value, range, and indeterminate phase.
 
 ## Preview
 
+<ComponentDemo id="progress" capture="captures/progress.png" height={480} />
+
 <Capture src="captures/progress.png" alt="Native progress window showing four determinate downloads at 0, 25, 60, and 100 percent plus an indeterminate Loading workspace bar" caption="Native SDL_GPU capture of examples/progress at Alicorn 47c9d4a. The example theme supplies the track and teal fill roles; the value text and segment geometry carry the state." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. The capture is the
-real native component; the bar is not recreated in JavaScript. The capture predates the parts
-examples; re-capture is pending.</div>
 
 ## Responsibility split
 

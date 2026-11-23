@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:notices</code> is a presentation layer over Alicorn's notice runtime. It adds
@@ -16,10 +17,10 @@ capacity, live-region announcements, and one-shot expiry.
 
 ## Preview
 
+<ComponentDemo id="notices" capture="captures/notices.png" height={440} />
+
 <Capture src="captures/notices.png" alt="Native notices window with Post saved, Post warning, and Post error buttons and an inline offline warning card with Retry and Details actions" caption="Native SDL_GPU capture of examples/notices at Alicorn 47c9d4a. The inline card is an application-owned item; runtime toasts use Alicorn's own overlay and are not a second queue." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. The capture is the
-real native application; toast and card behavior is not recreated in JavaScript.</div>
 
 ## Responsibility split
 

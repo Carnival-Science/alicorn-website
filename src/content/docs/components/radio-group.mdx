@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:radio_group</code> is a controlled compound control for choosing one value from a
@@ -16,11 +17,10 @@ assistive-technology activation parity.
 
 ## Preview
 
+<ComponentDemo id="radio-group" capture="captures/radio-group.png" height={440} />
+
 <Capture src="captures/radio-group.png" alt="Native radio group window with a Reading preferences card, a vertical text-size group, and a horizontal density group" caption="Native SDL_GPU capture of examples/radio_group at Alicorn 47c9d4a. The themed surfaces come from the example theme; the selected dot and focus presentation do not rely on color alone." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. The capture is the
-real native control; keyboard behavior is documented and tested in the package.
-The capture predates the parts examples; re-capture is pending.</div>
 
 ## Responsibility split
 

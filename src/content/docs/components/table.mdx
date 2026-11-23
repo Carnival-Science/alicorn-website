@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:table</code> is a static, composable, <strong>non-spanned</strong> presentation table
@@ -17,10 +18,10 @@ shared with <a href="../data-grid/">Data Grid</a> through <code>alikit:table_cor
 
 ## Preview
 
+<ComponentDemo id="table" capture="captures/table.png" height={480} />
+
 <Capture src="captures/table.png" alt="Native static table window with a documents table, header row, and two-line cells" caption="Native SDL_GPU capture of examples/table at Alicorn 47c9d4a. The application owns the rows and formatting; the table renders the static projection and optional virtual window." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. The capture is the
-real native table.</div>
 
 ## Responsibility split
 

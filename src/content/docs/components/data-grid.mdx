@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:data_grid</code> is an interactive, virtualized, <strong>non-spanned</strong> grid over
@@ -17,10 +18,10 @@ headers, and cell scaffolding come from <code>alikit:table_core</code>.
 
 ## Preview
 
+<ComponentDemo id="data-grid" capture="captures/data-grid.png" height={480} />
+
 <Capture src="captures/data-grid.png" alt="Native data grid window with a filter field and an interactive document grid with selected row and cell" caption="Native SDL_GPU capture of examples/data_grid at Alicorn 47c9d4a. The application filters and sorts its own dataset; the grid owns roving focus, reveal, and proposals." />
 
-<div class="preview-note">The capture is the real native grid; the interactive contract is
-documented and tested in the package.</div>
 
 ## Responsibility split
 

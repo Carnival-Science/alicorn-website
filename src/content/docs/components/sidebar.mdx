@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:sidebar</code> is the P0 Sidebar shape: a vertical, icon-led navigation rail with
@@ -16,10 +17,10 @@ route change on activation.
 
 ## Preview
 
+<ComponentDemo id="sidebar" capture="captures/sidebar.png" height={440} />
+
 <Capture src="captures/sidebar.png" alt="Native navigation rail window in the collapsed icon-only presentation, with a Files content pane and a Collapse rail checkbox" caption="Native SDL_GPU capture of examples/sidebar at Alicorn 47c9d4a, shown collapsed. Collapsing changes width and omits visible labels; semantic IDs, selected state, and focus ownership do not change." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. The capture is the
-real native rail; route content and routing stay application-owned.</div>
 
 ## Responsibility split
 

@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Capture from '../../../components/Capture.astro';
+import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
 <code>alikit:palette_parts</code> is a copyable, parts-based variant of the command palette's
@@ -17,10 +18,10 @@ dismissal, and focus restoration.
 
 ## Preview
 
+<ComponentDemo id="palette-parts" capture="captures/palette-parts.png" height={420} />
+
 <Capture src="captures/palette-parts.png" alt="Native palette parts window with a filter field and a six-row result list" caption="Native SDL_GPU capture of examples/palette_parts at Alicorn 47c9d4a. This is the reusable result-list part, not the modal command palette." />
 
-<div class="preview-note">Interactive WebGPU preview is a later catalog step. This capture is the
-real native application; the row list is not recreated in JavaScript.</div>
 
 ## Responsibility split
 
