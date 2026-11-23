@@ -41,4 +41,4 @@ configuration diagnostic. Do not assume a valid role ID proves that the active
 theme has bound it.
 
 For reusable application components that build on Alicorn rather than changing
-its runtime, see the companion [AliKit component catalog](/alikit).
+its runtime, see the companion [AliKit component catalog](/components/).

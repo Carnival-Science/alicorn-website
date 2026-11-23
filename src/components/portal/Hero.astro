@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/paths';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -10,8 +11,8 @@
       text, and rendering products between updates—so the work follows what changed.
     </p>
     <div class="hero-actions">
-      <a class="button button--primary" href="/docs/getting-started/first-app">Build your first app <span aria-hidden="true">→</span></a>
-      <a class="button button--quiet" href="/docs/concepts/retained-runtime">Explore the runtime</a>
+      <a class="button button--primary" href={withBase('/docs/getting-started/first-app')}>Build your first app <span aria-hidden="true">→</span></a>
+      <a class="button button--quiet" href={withBase('/components')}>Browse components</a>
     </div>
     <p class="hero-footnote">Your application owns its data. Alicorn owns the retained UI work.</p>
   </div>
@@ -23,7 +24,7 @@
       <i>native window</i>
     </div>
     <img
-      src="/assets/scratchpad-on-alicorn.png"
+      src={withBase('/assets/scratchpad-on-alicorn.png')}
       alt="Scratchpad running on Alicorn: a native editor window with a workspace file tree and a JSON document."
       width="1216"
       height="768"

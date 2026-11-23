@@ -1,0 +1,27 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  packageName: string;
+  purpose: string;
+  capture: string;
+  badges?: string[];
+}
+
+const { href, title, packageName, purpose, capture, badges = [] } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const target = href.startsWith('http')
+  ? href
+  : `${base.replace(/\/$/, '')}/${href.replace(/^\//, '')}`;
+const image = capture.startsWith('http') ? capture : `${base}${capture}`;
+---
+
+<a class="component-card" href={target}>
+  <img src={image} alt={`${title} — native Alicorn capture`} loading="lazy" decoding="async" />
+  <code>{packageName}</code>
+  <h3>{title}</h3>
+  <p>{purpose}</p>
+  <div class="card-meta">
+    {badges.map((badge) => <span class="badge">{badge}</span>)}
+  </div>
+</a>

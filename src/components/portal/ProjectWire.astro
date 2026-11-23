@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/paths';
 ---
 
 <section class="runtime-section section-wrap" aria-labelledby="runtime-title">
@@ -10,7 +11,7 @@
       change needs a new description. The runtime reconciles that description with retained
       identity and derived UI products.
     </p>
-    <a class="text-link" href="/docs/concepts/retained-runtime">Read the runtime model <span aria-hidden="true">→</span></a>
+    <a class="text-link" href={withBase('/docs/concepts/retained-runtime')}>Read the runtime model <span aria-hidden="true">→</span></a>
   </div>
 
   <div class="pipeline" aria-label="Alicorn runtime flow">

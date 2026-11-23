@@ -1,29 +1,80 @@
 ---
 title: Alicorn documentation
-description: Start building a native Odin interface, understand retained work, and explore Alicorn's API.
+description: Build a native Odin interface, understand retained work, browse AliKit components, and find the exact API contract you need.
 ---
 
-Alicorn is an **experimental native GUI runtime for Odin**. You describe your UI
-with ordinary Odin code; the runtime retains identity, interaction, layout,
-text, and rendering products between updates.
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Start here
+Alicorn is an **experimental native GUI runtime for Odin**. You describe your UI with ordinary
+Odin code; the runtime retains identity, interaction, layout, text, and rendering products between
+updates. Application data and policy stay in your own structs. The native host owns the window,
+input pump, event loop, and GPU submission.
 
-- [System requirements](/docs/getting-started/requirements) — set up Odin and the native toolchain.
-- [Your first native app](/docs/getting-started/first-app) — run and change the starter window.
-- [The retained runtime](/docs/concepts/retained-runtime) — understand what Alicorn retains and what your app owns.
+```odin
+import ui "alicorn:ui"
 
-## Build from a real example
+App :: struct { saved: bool }
 
-The repository contains a progressive set of native examples, from a counter
-and form to asynchronous lists, custom surfaces, secondary windows, themes,
-controls, and retained motion.
+render :: proc(app: ^App, ctx: ^ui.UI) {
+    if ui.column(ctx, padding = 24, gap = 12) {
+        ui.text(ctx, "Hello, Alicorn")
+        if ui.button(ctx, "Save") { app.saved = true }
+    }
+}
 
-[Browse the examples and API map](/docs/reference/api-and-examples).
+main :: proc() {
+    app := App{}
+    ui.run(&app, render, title = "Alicorn", width = 720, height = 480)
+}
+```
 
-## Optional reusable components
+<CardGrid>
+  <Card title="Your first native app" icon="rocket">
+    Install the toolchain, run the starter, and change a label.
 
-[AliKit](/alikit) is a companion source-level Odin package for applications
-built with Alicorn. Its current catalog includes a command palette and a
-virtualized tree view; the application retains ownership of its data, policies,
-and actions.
+    [Build the starter](/docs/getting-started/first-app/)
+  </Card>
+  <Card title="Components" icon="puzzle">
+    The AliKit catalog: native previews, copyable Odin source, and explicit contracts.
+
+    [Browse components](/components/)
+  </Card>
+  <Card title="The retained runtime" icon="setting">
+    What Alicorn retains, what your app owns, and when work becomes dirty.
+
+    [Read the runtime model](/docs/concepts/retained-runtime/)
+  </Card>
+  <Card title="API and examples" icon="open-book">
+    Find the right package and follow the repository's progressive examples.
+
+    [Browse the API map](/docs/reference/api-and-examples/)
+  </Card>
+</CardGrid>
+
+## What the documentation covers
+
+| Section | Start with | What it answers |
+| --- | --- | --- |
+| **Getting started** | [System requirements](/docs/getting-started/requirements/) | What to install and how to get a native window on screen. |
+| **Guide** | [The retained runtime](/docs/concepts/retained-runtime/) | How direct authoring, explicit invalidation, identity, themes, and accessibility fit together. |
+| **Components** | [AliKit overview](/components/) | Which reusable components exist, what they own, and the contract each one publishes. |
+| **Reference** | [API and examples](/docs/reference/api-and-examples/) | The public packages, the example progression, and the AliKit component registry. |
+| **Research** | [Layout scopes](/docs/research/layout-scopes/) | Evidence records behind layout, rendering, and invalidation decisions. |
+| **Development** | [Build and test](/docs/development/build-and-test/) | Repository checks, fixtures, and the validation boundary. |
+
+## Where AliKit fits
+
+[AliKit](/components/) is the optional source-level component library for Alicorn. It adds
+reusable behavior and copyable presentation over Alicorn's public APIs; it does not add a second
+runtime, state store, theme engine, or component lifecycle. An application may use AliKit, copy a
+single component, or build its own controls directly on Alicorn.
+
+The dependency direction is one-way: application → AliKit (optional) → Alicorn.
+
+## Project status
+
+Alicorn is experimental and its API is evolving. The
+[project status page](/docs/project/status/) records the current platform evidence and known
+limits, and the [research index](/docs/research/) links the validation records behind those
+claims. Read the [validated boundary](/docs/development/build-and-test/) before treating a
+headless test as evidence about native window presentation or GPU output.

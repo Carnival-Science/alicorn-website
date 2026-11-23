@@ -1,6 +1,7 @@
 ---
 import PortalLayout from '../../layouts/PortalLayout.astro';
 import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -27,9 +28,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
             {post.data.tags.map((tag) => <span>{tag}</span>)}
           </div>
           <div>
-            <h2><a href={'/blog/' + post.id}>{post.data.title}</a></h2>
+            <h2><a href={withBase('/blog/' + post.id)}>{post.data.title}</a></h2>
             <p>{post.data.description}</p>
-            <a class="blog-read" href={'/blog/' + post.id}>Read note <span aria-hidden="true">→</span></a>
+            <a class="blog-read" href={withBase('/blog/' + post.id)}>Read note <span aria-hidden="true">→</span></a>
           </div>
         </article>
       ))}

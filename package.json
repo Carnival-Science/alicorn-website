@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "sync:catalog": "node scripts/sync-alikit-catalog.mjs",
+    "check:catalog": "node scripts/sync-alikit-catalog.mjs --check",
+    "check:links": "node scripts/check-links.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",

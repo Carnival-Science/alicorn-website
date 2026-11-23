@@ -1,6 +1,8 @@
 /**
  * Shared Alicorn facts and links for the portal and documentation chrome.
  */
+import { withBase } from '../lib/paths';
+
 export const repository = 'https://github.com/Carnival-Science/Alicorn';
 export const alikitRepository = 'https://github.com/samanshaiza004/alicorn-kit';
 
@@ -16,12 +18,11 @@ export const site = {
 } as const;
 
 export const channels = [
-  { label: 'OVERVIEW', href: '/' },
-  { label: 'GET STARTED', href: '/docs/getting-started/first-app' },
-  { label: 'RUNTIME MODEL', href: '/docs/concepts/retained-runtime' },
-  { label: 'API & EXAMPLES', href: '/docs/reference/api-and-examples' },
-  { label: 'ALIKIT', href: '/alikit' },
-  { label: 'BUILD', href: '/downloads' },
+  { label: 'OVERVIEW', href: withBase('/') },
+  { label: 'COMPONENTS', href: withBase('/components') },
+  { label: 'DOCS', href: withBase('/docs') },
+  { label: 'BUILD', href: withBase('/downloads') },
+  { label: 'NOTES', href: withBase('/blog') },
 ];
 
 export const facts = [
@@ -33,9 +34,10 @@ export const facts = [
 ];
 
 export const footerLinks = [
-  { label: 'Documentation', href: '/docs' },
-  { label: 'Examples', href: '/docs/reference/api-and-examples' },
-  { label: 'AliKit components', href: '/alikit' },
+  { label: 'Documentation', href: withBase('/docs') },
+  { label: 'Components', href: withBase('/components') },
+  { label: 'Component registry', href: withBase('/docs/reference/manifest') },
+  { label: 'Examples', href: withBase('/docs/reference/api-and-examples') },
   { label: 'AliKit source', href: alikitRepository },
   { label: 'Source', href: repository },
   { label: 'Issues', href: repository + '/issues' },
@@ -43,21 +45,22 @@ export const footerLinks = [
 ];
 
 export const jumpTargets = [
-  { label: 'First native app', href: '/docs/getting-started/first-app' },
-  { label: 'Runtime model', href: '/docs/concepts/retained-runtime' },
-  { label: 'Invalidation and identity', href: '/docs/concepts/invalidation' },
-  { label: 'Themes and custom controls', href: '/docs/guides/themes-and-components' },
-  { label: 'AliKit components', href: '/alikit' },
-  { label: 'Accessibility status', href: '/docs/guides/accessibility' },
-  { label: 'API and examples', href: '/docs/reference/api-and-examples' },
-  { label: 'Build and test', href: '/docs/development/build-and-test' },
-  { label: 'Project status', href: '/docs/project/status' },
+  { label: 'First native app', href: withBase('/docs/getting-started/first-app') },
+  { label: 'Runtime model', href: withBase('/docs/concepts/retained-runtime') },
+  { label: 'Invalidation and identity', href: withBase('/docs/concepts/invalidation') },
+  { label: 'Component catalog', href: withBase('/components') },
+  { label: 'Component authoring', href: withBase('/docs/guides/component-authoring') },
+  { label: 'Themes and custom controls', href: withBase('/docs/guides/themes-and-components') },
+  { label: 'Accessibility status', href: withBase('/docs/guides/accessibility') },
+  { label: 'API and examples', href: withBase('/docs/reference/api-and-examples') },
+  { label: 'Build and test', href: withBase('/docs/development/build-and-test') },
+  { label: 'Project status', href: withBase('/docs/project/status') },
 ];
 
 export const docsLinks = [
-  { label: 'Getting started', href: '/docs/getting-started/requirements' },
-  { label: 'Runtime model', href: '/docs/concepts/retained-runtime' },
-  { label: 'Themes and components', href: '/docs/guides/themes-and-components' },
-  { label: 'Accessibility', href: '/docs/guides/accessibility' },
-  { label: 'AliKit components', href: '/alikit' },
+  { label: 'Getting started', href: withBase('/docs/getting-started/requirements') },
+  { label: 'Runtime model', href: withBase('/docs/concepts/retained-runtime') },
+  { label: 'Component catalog', href: withBase('/components') },
+  { label: 'Themes and components', href: withBase('/docs/guides/themes-and-components') },
+  { label: 'Accessibility', href: withBase('/docs/guides/accessibility') },
 ];

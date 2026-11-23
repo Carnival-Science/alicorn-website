@@ -1,10 +1,11 @@
 ---
 import { footerLinks } from '../../data/site';
+import { withBase } from '../../lib/paths';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <a class="footer-brand" href="/">
+  <a class="footer-brand" href={withBase('/')}>
     <span class="footer-mark" aria-hidden="true">A</span>
     <span>Alicorn</span>
   </a>

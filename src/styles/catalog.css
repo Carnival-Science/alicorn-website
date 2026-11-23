@@ -1,0 +1,149 @@
+/* AliKit component catalog inside the Alicorn documentation. --------------- */
+
+.lede {
+  max-width: 52rem;
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-lg);
+  line-height: 1.55;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.component-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 5px;
+  padding: 0.8rem;
+  background: var(--sl-color-bg-nav);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.component-card:hover {
+  border-color: #bc7042;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.component-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: top center;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 3px;
+  background: #0b0d13;
+}
+
+.component-card code {
+  color: var(--sl-color-text-accent);
+  font-size: var(--sl-text-xs);
+}
+
+.component-card h3 {
+  margin: 0;
+  color: var(--sl-color-white);
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.component-card p {
+  margin: 0;
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+  line-height: 1.45;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+  color: var(--sl-color-gray-3);
+  font: 600 var(--sl-text-xs) var(--sl-font-mono);
+  letter-spacing: 0.03em;
+}
+
+/* Component pages --------------------------------------------------------- */
+
+.capture-figure { margin: 1.25rem 0 1.75rem; }
+
+.capture {
+  display: block;
+  width: 100%;
+  max-width: 60rem;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 5px;
+  background: #0b0d13;
+}
+
+.capture-caption {
+  margin: 0.45rem 0 0;
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+}
+
+.preview-note {
+  border-inline-start: 3px solid #3e8fba;
+  border-radius: 0 4px 4px 0;
+  padding: 0.55rem 0.9rem;
+  background: var(--sl-color-gray-7);
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+}
+
+.pin-note {
+  border: 1px dashed var(--sl-color-hairline);
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+}
+
+.pin-note strong { color: var(--sl-color-white); }
+
+table.api-table td:first-child { white-space: nowrap; }
+
+.contract-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1px;
+  margin: 1.25rem 0;
+  border: 1px solid var(--sl-color-hairline);
+  background: var(--sl-color-hairline);
+}
+
+.contract-grid > div {
+  padding: 0.85rem 1rem;
+  background: var(--sl-color-bg-nav);
+}
+
+.contract-grid dt {
+  color: var(--sl-color-text-accent);
+  font: 700 0.7rem var(--sl-font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.contract-grid dd {
+  margin: 0.3rem 0 0;
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+}

@@ -1,5 +1,6 @@
 ---
 import { docsLinks, repository } from '../../data/site';
+import { withBase } from '../../lib/paths';
 ---
 
 <section class="closing section-wrap" aria-labelledby="closing-title">
@@ -8,7 +9,7 @@ import { docsLinks, repository } from '../../data/site';
     <h2 id="closing-title">Start with one button.</h2>
     <p>Build the native starter, change a label, then add only the runtime concepts your application actually needs.</p>
     <div class="hero-actions">
-      <a class="button button--primary" href="/docs/getting-started/requirements">Get started <span aria-hidden="true">→</span></a>
+      <a class="button button--primary" href={withBase('/docs/getting-started/requirements')}>Get started <span aria-hidden="true">→</span></a>
       <a class="button button--quiet" href={repository}>Read the source <span aria-hidden="true">↗</span></a>
     </div>
   </div>

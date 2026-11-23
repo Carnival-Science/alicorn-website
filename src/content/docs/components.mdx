@@ -1,0 +1,146 @@
+---
+title: Components
+description: The AliKit component catalog for Alicorn — native previews, copyable Odin source, and explicit ownership, keyboard, accessibility, and test contracts.
+sidebar:
+  label: AliKit overview
+---
+
+import CatalogCard from '../../components/CatalogCard.astro';
+import manifest from '../../data/alikit-components.json';
+import pin from '../../../alikit-catalog.json';
+
+export const catalog = manifest.components.filter((component) => component.page);
+export const support = manifest.components.filter((component) => !component.page);
+export const captureFor = (component) =>
+  `captures/${component.capture ? component.capture.split('/').pop() : `${component.id}.png`}`;
+export const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+<div class="lede">
+AliKit is the optional component library for <a href="https://github.com/Carnival-Science/Alicorn">Alicorn</a>,
+the native GUI runtime for Odin. Every component is ordinary Odin source over Alicorn's public UI,
+semantics, layout, and input APIs. There is no second UI tree, state store, theme engine, or
+component lifecycle.
+</div>
+
+These pages are the public catalog. They are written where the components live — in the
+[AliKit repository](https://github.com/samanshaiza004/alicorn-kit) — and published here at the
+pinned revision `{pin.revision.slice(0, 7)}`. Each page carries the native preview, the copyable
+implementation, the parts, the theme recipe, the input and accessibility contract, the conformance
+tests, the API, and the limits.
+
+## Three layers, one runtime
+
+The dependency direction is one-way. Alicorn never imports AliKit or an application.
+
+| Layer | Owns | Does not own |
+| --- | --- | --- |
+| **Application** | Domain state, commands, ranking, hierarchy, loading, mutation, routing, dispatch, and product policy. | Private runtime storage, a parallel accessibility tree, or a new engine subsystem. |
+| **AliKit** | Reusable interaction behavior, semantics, copyable presentation parts, and setup-time theme contracts. | A second runtime, theme engine, retained tree, state store, or required framework. |
+| **Alicorn** | Layout, styling, motion, focus, input routing, semantics, virtual lists, rendering, and conformance primitives. | A ready-made component catalog, application policy, or a second component lifecycle. |
+
+When a behavior is application policy, AliKit exposes the event or callback instead of owning a
+second policy engine. Each component page states the exact split for that component.
+
+## The catalog
+
+<div class="catalog-grid">
+  {catalog.map((component) => (
+    <CatalogCard
+      href={component.page}
+      title={component.name}
+      packageName={component.package}
+      purpose={component.purpose}
+      capture={captureFor(component)}
+      badges={[component.kind, component.status]}
+    />
+  ))}
+</div>
+
+The previews are genuine SDL_GPU windows captured from the examples in the AliKit repository. The
+site does not reimplement a component in HTML or JavaScript. Interactive WebGPU previews are a
+later catalog step; the capture and the copyable source are the v1 contract.
+
+### Support packages
+
+These packages are part of AliKit but are not separate catalog pages. They are recorded in the
+[component registry](/docs/reference/manifest/) and in `components.json`.
+
+<table>
+  <thead>
+    <tr><th>Package</th><th>Role</th></tr>
+  </thead>
+  <tbody>
+    {support.map((entry) => (
+      <tr>
+        <td><code>{entry.package}</code></td>
+        <td>{entry.purpose}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## How to read a component page
+
+Every page follows the same order so the five-point Alicorn authoring standard stays inspectable.
+
+| Five-point standard | Where it appears |
+| --- | --- |
+| Complete, copyable implementation | **Preview**, **Copyable implementation** |
+| Individually composable parts | **Compose the parts**, **Parts and identities** |
+| Custom styling and motion | **Styling, motion, and theme** |
+| Keyboard and accessibility contracts | **Keyboard and accessibility contract** |
+| `testui` conformance examples | **Conformance tests** |
+
+Each page also lists the public API, the known limits, the exact Alicorn pin used for the capture,
+and a source map back to the package, tests, example, and theme data.
+
+- **Preview** is the native capture, not a browser recreation.
+- **Responsibility split** names what Alicorn, the package, and the application own.
+- **Installation** and **Copyable implementation** are the two consumption paths.
+- **Compose the parts** is the path for applications that own the shell.
+- **Parts and identities** document stable keys and what may be omitted or replaced.
+- **Keyboard and accessibility contract** is a table of inputs and published semantics, including
+  what the component does not claim.
+- **Conformance tests** name the `testui` coverage and the command that reproduces it.
+- **Limits** are explicit non-claims, not a roadmap.
+
+The upstream standard is
+[component authoring](/docs/guides/component-authoring/).
+
+## Install or copy
+
+AliKit is source-level Odin. Import the package through the AliKit collection, compose its public
+parts beside Alicorn controls, or copy the declared source files into your application. The
+[package catalog](/components/catalog/) records the install shape, the copy recipes, and how to
+choose between overlapping packages such as the command palette and Palette Parts.
+
+```sh
+odin build . -collection:alicorn=<alicorn> -collection:alikit=<alicorn-kit>
+```
+
+## The registry
+
+[`components.json`](https://github.com/samanshaiza004/alicorn-kit/blob/main/components.json) is the
+machine-readable catalog. It records each entry's identity, package, source, tests, example,
+capture, dependencies, owned state, parts, keyboard and accessibility contract, theme roles, API,
+and limits. The manifest is a catalog seed, not a package manifest: it declares no binary artifact,
+semantic version, or install command.
+
+<p><a href={`${base}components.json`} download>Download components.json</a> · <a href="/docs/reference/manifest/">Field reference</a></p>
+
+## Pin the pair together
+
+<div class="pin-note">
+<strong>Source-level and early.</strong> AliKit imports Alicorn's public packages and may evolve
+with them. This catalog is published from alicorn-kit <code>{pin.revision.slice(0, 7)}</code>,
+whose <code>dependencies.lock.json</code> pins Alicorn
+<code>{manifest.alicorn.revision.slice(0, 7)}</code>. Consume the exact revisions together;
+read <a href="/docs/reference/compatibility/">compatibility and pinning</a> before updating the pair.
+</div>
+
+## Not in AliKit yet
+
+Calendars, color pickers, split panes, terminals, and rich editors are not components here. The
+table is non-spanned. Built-in sorting, filtering, and editing are application policy. A nested
+tree sidebar is a later Sidebar variant. A component is added only when a real application need
+demonstrates reusable behavior.

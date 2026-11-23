@@ -1,5 +1,6 @@
 ---
 import { facts } from '../../data/site';
+import { withBase } from '../../lib/paths';
 ---
 
 <section class="status-section section-wrap" aria-label="Project facts and status">
@@ -20,7 +21,7 @@ import { facts } from '../../data/site';
     <p class="status-caveat">
       Alicorn's API and platform integration are evolving. Check the current support notes before
       choosing it for production work.
-      <a href="/docs/project/status">Read the status notes <span aria-hidden="true">→</span></a>
+      <a href={withBase('/docs/project/status')}>Read the status notes <span aria-hidden="true">→</span></a>
     </p>
   </div>
 </section>

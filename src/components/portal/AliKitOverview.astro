@@ -1,5 +1,6 @@
 ---
 import { alikitRepository } from '../../data/site';
+import { withBase } from '../../lib/paths';
 ---
 
 <section class="alikit-overview section-wrap" aria-labelledby="alikit-overview-title">
@@ -11,7 +12,7 @@ import { alikitRepository } from '../../data/site';
       and decisions; AliKit reuses Alicorn for input, focus, semantics, layout, and presentation.
     </p>
     <div class="hero-actions">
-      <a class="button button--primary" href="/alikit">Explore AliKit <span aria-hidden="true">→</span></a>
+      <a class="button button--primary" href={withBase('/components')}>Browse components <span aria-hidden="true">→</span></a>
       <a class="text-link" href={alikitRepository}>Browse source <span aria-hidden="true">↗</span></a>
     </div>
   </div>
@@ -25,7 +26,7 @@ import { alikitRepository } from '../../data/site';
     <li class="alikit-layer alikit-layer--kit">
       <span>OPTIONAL COMPONENTS</span>
       <strong>AliKit</strong>
-      <small>Command Palette · Tree View</small>
+      <small>Palette · tree · table · dialog parts</small>
     </li>
     <li class="alikit-layer alikit-layer--runtime">
       <span>RETAINED UI</span>

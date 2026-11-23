@@ -1,7 +1,8 @@
 ---
+import { withBase } from '../../lib/paths';
 ---
 
-<a class="docs-wordmark" href="/" aria-label="Alicorn home">
+<a class="docs-wordmark" href={withBase('/')} aria-label="Alicorn home">
   <svg viewBox="0 0 32 32" aria-hidden="true">
     <path d="M16 2 30 30h-7l-2.6-5.5h-8.8L9 30H2L16 2Zm2.1 17L16 14.6 13.9 19h4.2Z" fill="currentColor" />
     <circle cx="25" cy="7" r="2.8" fill="#bc7042" />
@@ -9,7 +10,7 @@
   <span>Alicorn</span>
   <b>DOCS</b>
 </a>
-<a class="docs-alikit-link" href="/alikit">AliKit</a>
+<a class="docs-alikit-link" href={withBase('/components')}>Components</a>
 
 <style>
   .docs-wordmark {

@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/samanshaiza004/alicorn-kit",
+  "revision": "fded57a94e6a2c5bf44d8b980befe5a260ff5ed5",
+  "sourceRoot": "website",
+  "note": "AliKit remains the authoring home for component documentation. This pin is the revision published in the Alicorn website component catalog. Change it, run `npm run sync:catalog` in website/, review the diff, and commit."
+}
