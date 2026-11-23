@@ -1,0 +1,40 @@
+---
+import { pixelCells, pixelPath } from '../../lib/pixel-font';
+
+interface Props {
+  text: string;
+  /** Rendered size of one cell in px. */
+  cell?: number;
+  class?: string;
+  /** Render one rect per cell so the cells can assemble on load. */
+  assemble?: boolean;
+  /** Accessible label. Defaults to the text; pass '' to hide from AT. */
+  label?: string;
+}
+
+const { text, cell = 3, class: className, assemble = false, label = text } = Astro.props;
+const { d, width, height } = pixelPath(text);
+const cells = assemble ? pixelCells(text).cells : [];
+// Deterministic scatter so the build output is stable.
+const scatter = (i: number, k: number) => (((Math.sin(i * 12.9898 + k * 78.233) * 43758.5453) % 1) + 1) % 1;
+---
+<svg
+  class:list={['pixel-text', className, { 'is-assembling': assemble }]}
+  viewBox={`0 0 ${width} ${height}`}
+  width={width * cell}
+  height={height * cell}
+  shape-rendering="crispEdges"
+  role={label ? 'img' : undefined}
+  aria-label={label || undefined}
+  aria-hidden={label ? undefined : 'true'}
+  fill="currentColor"
+>
+  {assemble
+    ? cells.map(([x, y], i) => (
+        <rect
+          x={x} y={y} width="1" height="1"
+          style={`--dx:${((scatter(i, 1) - .5) * 18).toFixed(1)}px;--dy:${((scatter(i, 2) - .5) * 12).toFixed(1)}px;--d:${(scatter(i, 3) * 900).toFixed(0)}ms`}
+        />
+      ))
+    : <path d={d} />}
+</svg>

@@ -1,7 +1,7 @@
 ---
 import '../styles/portal.css';
 import Masthead from '../components/portal/Masthead.astro';
-import ChannelNav from '../components/portal/ChannelNav.astro';
+import '../styles/exhibition.css';
 import SiteFooter from '../components/portal/SiteFooter.astro';
 import { site } from '../data/site';
 import { withBase } from '../lib/paths';
@@ -9,10 +9,9 @@ import { withBase } from '../lib/paths';
 interface Props {
   title: string;
   description?: string;
-  channel?: string;
 }
 
-const { title, description = site.description, channel } = Astro.props;
+const { title, description = site.description } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
@@ -21,7 +20,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f1eee5" />
+    <meta name="theme-color" content="#f4f4ef" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical.href} />}
@@ -36,7 +35,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="page-shell">
       <Masthead />
-      <ChannelNav current={channel} />
       <main id="main"><slot /></main>
       <SiteFooter />
     </div>

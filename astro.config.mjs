@@ -35,7 +35,7 @@ export default defineConfig({
         Footer: './src/components/docs/Footer.astro',
       },
       head: [
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#f1eee5' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#f4f4ef' } },
       ],
       sidebar: [
         {
