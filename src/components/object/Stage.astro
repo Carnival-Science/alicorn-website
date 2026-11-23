@@ -1,0 +1,22 @@
+---
+import { stage } from '../../lib/stage';
+---
+<figure class="stage" aria-label="Alicorn app stage">
+  <div class="stage-frame">
+    <div class="mount" data-mount data-module={stage.module ?? ''} style={`aspect-ratio:${stage.width}/${stage.height}`}>
+      <canvas data-stage-canvas width={stage.width} height={stage.height} hidden></canvas>
+      <div class="standby" data-standby>
+        <canvas class="mosaic" data-mosaic aria-hidden="true"></canvas>
+        <p class="stage-caption" data-caption aria-hidden="true">retained to run</p>
+      </div>
+    </div>
+  </div>
+  <figcaption class="stage-meta">
+    <span class="lamp" data-lamp aria-hidden="true"></span>
+    <span class="stage-name">{stage.id.toLowerCase()} · {stage.width}×{stage.height}</span>
+    <span class="stage-status" aria-live="polite"><span data-status>standby</span> · <span data-adapter>checking webgpu</span></span>
+    <button type="button" class="peek-toggle" data-peek-toggle aria-expanded="false" aria-controls="peek">
+      <span aria-hidden="true">{'{ }'}</span> peek source
+    </button>
+  </figcaption>
+</figure>

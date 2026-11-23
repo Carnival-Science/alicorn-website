@@ -1,21 +1,68 @@
 ---
-import PortalLayout from '../layouts/PortalLayout.astro';
-import Hero from '../components/portal/Hero.astro';
-import ModuleDeck from '../components/portal/ModuleDeck.astro';
-import ProjectWire from '../components/portal/ProjectWire.astro';
-import AliKitOverview from '../components/portal/AliKitOverview.astro';
-import DispatchGrid from '../components/portal/DispatchGrid.astro';
-import StatusRibbon from '../components/portal/StatusRibbon.astro';
-import LowerIndex from '../components/portal/LowerIndex.astro';
+import ObjectLayout from '../layouts/ObjectLayout.astro';
+import Stage from '../components/object/Stage.astro';
+import Peek from '../components/object/Peek.astro';
+import Readout from '../components/object/Readout.astro';
+import PixelText from '../components/object/PixelText.astro';
+import { sections } from '../data/readout';
 import { site } from '../data/site';
----
+import { withBase } from '../lib/paths';
 
-<PortalLayout title="Alicorn — native GUI runtime for Odin" description={site.description}>
-  <Hero />
-  <ModuleDeck />
-  <ProjectWire />
-  <AliKitOverview />
-  <DispatchGrid />
-  <StatusRibbon />
-  <LowerIndex />
-</PortalLayout>
+const docTabs = [
+  { label: 'docs', href: withBase('/docs/') },
+  { label: 'components', href: withBase('/components/') },
+  { label: 'first app', href: withBase('/docs/getting-started/first-app/') },
+  { label: 'registry', href: withBase('/docs/reference/manifest/') },
+  { label: 'source ↗', href: site.repository },
+  { label: 'issues ↗', href: site.issues },
+];
+const year = new Date().getFullYear();
+---
+<ObjectLayout title="Alicorn — direct to write, retained to run">
+  <h1 class="sr-only">Alicorn, a native GUI runtime for Odin</h1>
+  <div class="sheet">
+    <nav class="topnav" aria-label="Sections">
+      <div role="tablist" aria-label="Sections">
+        {sections.map((s, i) => (
+          <button type="button" role="tab" id={'tab-' + s.id} aria-controls={'panel-' + s.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={s.id}>
+            <PixelText text={s.tab} cell={2} />
+          </button>
+        ))}
+      </div>
+    </nav>
+    <hr class="rule" />
+
+    <div class="body">
+      <a class="brand" href={withBase('/')} aria-label="Alicorn home">
+        <svg class="mark" viewBox="0 0 12 9" shape-rendering="crispEdges" aria-hidden="true">
+          <rect x="6" y="0" width="1" height="1" fill="#3a3d39"/>
+          <rect x="2" y="3" width="1" height="1" fill="#a9aca4"/>
+          <rect x="4" y="2" width="4" height="4" fill="#b9cdee"/>
+          <rect x="5" y="4" width="1" height="1" fill="#2a2d29"/>
+          <rect x="7" y="2" width="2" height="2" fill="#2a2d29"/>
+          <rect x="8" y="4" width="2" height="2" fill="#2a2d29"/>
+          <rect x="6" y="6" width="2" height="2" fill="#2a5fd0"/>
+          <rect x="10" y="3" width="1" height="1" fill="#2a5fd0"/>
+        </svg>
+        <span class="brand-word">alicorn<b>runtime</b></span>
+      </a>
+
+      <div class="copy">
+        <Readout />
+        <Peek />
+      </div>
+
+      <Stage />
+    </div>
+
+    <p class="legal">©{year} Alicorn and AliKit contributors. Experimental software under the zlib License.</p>
+
+    <hr class="rule rule--bottom" />
+    <nav class="doctabs" aria-label="Documentation">
+      {docTabs.map((t) => <a href={t.href}>{t.label}</a>)}
+    </nav>
+  </div>
+  <script>
+    import '../scripts/object';
+  </script>
+</ObjectLayout>

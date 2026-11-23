@@ -14,11 +14,33 @@ The site has one Astro build with three surfaces:
 
 | Route | Contents |
 |---|---|
-| `/` | The portal: what Alicorn is, the runtime model, and where to start. |
+| `/` | The homepage: the WebGPU app stage, the runtime model, and AliKit, composed as one object. |
 | `/docs/` | Starlight documentation: getting started, guide, reference, research, development, project. |
 | `/components/` | The AliKit catalog: overview, native previews, per-component contracts, package catalog. |
 | `/docs/reference/manifest/` | The machine-readable `components.json` registry. |
 | `/components.json` | The registry itself, copied into the build. |
+
+## The homepage
+
+The homepage is a quiet sheet in the manner of early-2000s studio sites. A
+small pixel-font nav (`src/lib/pixel-font.ts`) sits over a heavy rule and
+switches the text column between Runtime, Identity, AliKit, Build, and Notes.
+The app stage is on the right, and the documentation tabs hang from a second
+rule at the foot. On standby the stage shows a sky through square glass
+tiles (`src/lib/glass-sky.ts`, WebGL). Each tile gathers the light behind it
+the way a pixel does, and the clouds and sunlight breathe on slow, unrelated
+periods. It renders at 30 fps and pauses when it is off screen. Panel changes
+repaint with a raster dissolve.
+`?still` renders the settled page without motion for captures.
+
+### The stage
+
+`src/lib/stage.ts` reserves the stage for an Alicorn app built for WebGPU. Set
+`stage.module` to the URL of an ES module whose default export is a
+`StageMount`. It receives the canvas, an abort signal, and a status callback.
+Then replace `stage.source` with the files a visitor can open from
+**Peek source**. Until then the stage shows the glass sky, and the drawer
+shows the documented starter, marked as a placeholder.
 
 ## Build locally
 
@@ -109,7 +131,8 @@ Linux. Link rewrites and sidebar order are applied at sync time; edit those in
 |---|---|
 | `src/pages/` | Portal landing page, build page, project notes, and the `/alikit` redirect. |
 | `src/layouts/PortalLayout.astro` | Shared portal shell, metadata, navigation, and copy behavior. |
-| `src/components/portal/` | Landing-page sections, including the Alicorn/AliKit layer stack. |
+| `src/components/object/` | Homepage stage, source drawer, text panels, and pixel text. |
+| `src/components/portal/` | Shared site masthead and footer. |
 | `src/components/docs/` | Starlight title, search, and footer overrides. |
 | `src/components/Capture.astro` | Native capture figure used by component pages. |
 | `src/components/CatalogCard.astro` | Catalog card used by the component overview. |

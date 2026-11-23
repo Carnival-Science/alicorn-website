@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
+import { site, facts } from '../../data/site';
+import registry from '../../data/alikit-components.json';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const date = (d: Date) => d.toISOString().slice(0, 10).replaceAll('-', '.');
+const clone = `git clone ${site.repository}.git\ncd alicorn\n./tools/native_hello.sh`;
+const flow = `application state
+   │ change or action
+   ▼
+explicit invalidation
+   ▼
+odin ui description
+   │ stable call sites, keys
+   ▼
+retained identity · layout · text · paint
+   │ dirty stages only
+   ▼
+native host presents`;
+
+// PS3B-style index: groups with a header bar, numbered entries beneath.
+const groups: Array<{ kind: string; items: typeof registry.components }> = [];
+for (const c of registry.components) {
+  const kind = c.kind.replace('-', ' ');
+  const group = groups.find((g) => g.kind === kind) ?? groups[groups.push({ kind, items: [] }) - 1];
+  group.items.push(c);
+}
+let n = 0;
+---
+<div class="readout" data-readout tabindex="-1">
+  <section class="panel" id="panel-runtime" role="tabpanel" aria-labelledby="tab-runtime" data-panel="runtime" data-caption="retained to run">
+    <h2>direct to write.</h2>
+    <p>Alicorn is an experimental native GUI runtime for Odin. You describe an interface with ordinary control flow. Alicorn keeps node identity, layout, shaped text and paint between updates.</p>
+    <p>Your application owns its data. The native host owns the window, input and GPU.</p>
+    <dl class="facts">{facts.map((f) => <><dt>{f.label.toLowerCase()}</dt><dd>{f.value}</dd></>)}</dl>
+    <a class="go" href={withBase('/docs/concepts/retained-runtime/')}>The runtime model</a>
+  </section>
+
+  <section class="panel" id="panel-identity" role="tabpanel" aria-labelledby="tab-identity" data-panel="identity" data-caption="only what changed" hidden>
+    <h2>nothing repaints until it changes.</h2>
+    <p>The application says what changed through explicit invalidation. Stable call sites and keys keep focus, selection, scroll and paint with the same control across descriptions.</p>
+    <pre class="flow" aria-label="Runtime flow from application state to the native host">{flow}</pre>
+    <a class="go" href={withBase('/docs/concepts/invalidation/')}>Invalidation and identity</a>
+  </section>
+
+  <section class="panel" id="panel-alikit" role="tabpanel" aria-labelledby="tab-alikit" data-panel="alikit" data-caption="parts you own" hidden>
+    <h2>components you can read.</h2>
+    <p>AliKit is an optional library of source-level components built on Alicorn. Each one documents what it owns and what stays with your app.</p>
+    <div class="index">
+      {groups.map((g) => (
+        <section>
+          <h3><span aria-hidden="true">+</span> kit . {g.kind} ( {g.items.length} )</h3>
+          <ul>
+            {g.items.map((c) => (
+              <li><a href={withBase(c.page)}>- {c.name.toLowerCase()} . {String(++n).padStart(2, '0')}00{c.status !== 'stable' && <em> ( {c.status} )</em>}</a></li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+    <a class="go" href={withBase('/components/')}>The component catalog</a>
+  </section>
+
+  <section class="panel" id="panel-build" role="tabpanel" aria-labelledby="tab-build" data-panel="build" data-caption="build it yourself" hidden>
+    <h2>build from source.</h2>
+    <p>Clone the repository and run the native starter. On Windows use <code>tools\native_hello.ps1</code>.</p>
+    <div class="shell"><pre>{clone}</pre><button type="button" data-copy={clone}>copy</button></div>
+    <p>The runner builds <code>examples/01_hello</code> and opens a native window.</p>
+    <a class="go" href={withBase('/docs/getting-started/first-app/')}>Your first native app</a>
+  </section>
+
+  <section class="panel" id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" data-panel="notes" data-caption="notes from the bench" hidden>
+    <h2>project notes.</h2>
+    <p>Design notes and development records.</p>
+    <div class="index">
+      <section>
+        <h3><span aria-hidden="true">+</span> notes ( {posts.length} )</h3>
+        <ul>
+          {posts.map((post) => (
+            <li><a href={withBase('/blog/' + post.id + '/')}>- {post.data.title.toLowerCase()} . {date(post.data.date)}</a></li>
+          ))}
+        </ul>
+      </section>
+    </div>
+    <a class="go" href={withBase('/blog/')}>All notes</a>
+  </section>
+</div>

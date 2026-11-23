@@ -1,0 +1,23 @@
+---
+import { stage } from '../../lib/stage';
+import { highlight } from '../../lib/highlight';
+---
+<aside class="peek" id="peek" data-peek hidden aria-label="App source">
+  <div class="peek-head">
+    <span class="peek-title">source</span>
+    {stage.placeholderSource && <span class="peek-flag">placeholder</span>}
+    <button type="button" class="peek-close" data-peek-close>close <span aria-hidden="true">×</span></button>
+  </div>
+  <div class="peek-files" role="tablist" aria-label="Files">
+    {stage.source.map((file, i) => (
+      <button type="button" role="tab" id={'file-' + i} aria-controls={'src-' + i} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-file={i}>{file.path}</button>
+    ))}
+  </div>
+  {stage.source.map((file, i) => (
+    <div class="peek-code" role="tabpanel" id={'src-' + i} aria-labelledby={'file-' + i} hidden={i !== 0} tabindex="0">
+      <pre><code set:html={highlight(file.code)} /></pre>
+      {file.href && <a class="peek-link" href={file.href}>{file.path} on GitHub ↗</a>}
+    </div>
+  ))}
+  {stage.placeholderSource && <p class="peek-note">Shown until the embedded app is chosen: the documented starter and the stage loader contract.</p>}
+</aside>
