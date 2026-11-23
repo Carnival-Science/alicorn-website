@@ -4,11 +4,12 @@ The single public documentation site for Alicorn and its optional component
 library, AliKit. It is published on GitHub Pages at
 <https://carnival-science.github.io/alicorn-website/>.
 
-This repository is private: the Alicorn source repository does not ship the
-site, so cloning Alicorn gives you the runtime and the Markdown docs, not a
-second copy of the site build. The Alicorn repository keeps a redirect at the
-old Pages URL (<https://carnival-science.github.io/Alicorn/>) so existing links
-continue to work.
+The Alicorn source repository does not ship the site, so cloning Alicorn gives
+you the runtime and the Markdown docs, not a second copy of the site build. The
+Alicorn repository keeps a redirect at the old Pages URL
+(<https://carnival-science.github.io/Alicorn/>) so existing links continue to
+work. A second copy is served from Netlify at <https://alicorn.carnival.science/>
+(`netlify.toml`).
 
 The site has one Astro build with three surfaces:
 
