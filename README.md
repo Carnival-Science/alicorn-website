@@ -2,7 +2,13 @@
 
 The single public documentation site for Alicorn and its optional component
 library, AliKit. It is published on GitHub Pages at
-<https://carnival-science.github.io/Alicorn/>.
+<https://carnival-science.github.io/alicorn-website/>.
+
+This repository is private: the Alicorn source repository does not ship the
+site, so cloning Alicorn gives you the runtime and the Markdown docs, not a
+second copy of the site build. The Alicorn repository keeps a redirect at the
+old Pages URL (<https://carnival-science.github.io/Alicorn/>) so existing links
+continue to work.
 
 The site has one Astro build with three surfaces:
 
@@ -17,7 +23,6 @@ The site has one Astro build with three surfaces:
 ## Build locally
 
 ```sh
-cd website
 npm ci
 npm run dev
 ```
@@ -26,16 +31,17 @@ The site is at <http://localhost:4321/>. Search is indexed by Pagefind during
 the production build.
 
 ```sh
-npm run build       # static output in website/dist/
+npm run build       # static output in dist/
 npm run preview
+npm run check:links # crawl internal references in the built output
 ```
 
 ## Base path
 
 GitHub Pages serves a project site under the repository path. This repository is
-`Alicorn`, so the deployed base is `/Alicorn/` and Pages URLs are
-case-sensitive: the lowercase `/alicorn/` does not serve the site. The Pages
-workflow takes the base from `actions/configure-pages`, so no casing is
+`alicorn-website`, so the deployed base is `/alicorn-website/` and Pages URLs are
+case-sensitive: the mixed-case `/Alicorn-website/` does not serve the site. The
+Pages workflow takes the base from `actions/configure-pages`, so no casing is
 hard-coded. `PUBLIC_SITE_URL` is the origin used for canonical and social URLs.
 Both are build-time only and default to `/` and unset.
 
@@ -50,7 +56,7 @@ apply the base:
 Verify a base-path build locally before publishing:
 
 ```powershell
-$env:PUBLIC_BASE_PATH='/Alicorn'
+$env:PUBLIC_BASE_PATH='/alicorn-website'
 $env:PUBLIC_SITE_URL='https://carnival-science.github.io'
 npm run build
 npm run check:links
@@ -65,10 +71,12 @@ package, tests, example, theme data, native capture, page prose, and
 This site publishes that catalog at a pinned revision instead of forking it, so
 a component page cannot drift from the component.
 
-The pin is `website/alikit-catalog.json`. To publish a new AliKit revision:
+The pin is `alikit-catalog.json` at the repository root. It currently points at
+alicorn-kit `fded57a94e6a2c5bf44d8b980befe5a260ff5ed5`. To publish a new AliKit
+revision:
 
 1. Set `revision` to the alicorn-kit commit to publish (a full 40-character SHA).
-2. Run `npm run sync:catalog` from `website/`.
+2. Run `npm run sync:catalog` from the repository root.
 3. Review the content and capture diff, then `npm run build`.
 4. Commit the prose, the captures, `components.json`, and the pin together.
 
@@ -83,12 +91,12 @@ The sync writes only these managed paths:
 
 | Source (alicorn-kit) | Destination (this repository) |
 |---|---|
-| `website/src/content/docs/components/*.mdx` | `website/src/content/docs/components/*.mdx` |
-| `website/src/content/docs/components.md` | `website/src/content/docs/components/catalog.mdx` |
-| `website/src/content/docs/manifest.mdx` | `website/src/content/docs/docs/reference/manifest.mdx` |
-| `website/src/content/docs/compatibility.md` | `website/src/content/docs/docs/reference/compatibility.md` |
-| `website/public/captures/*.png` | `website/public/captures/*.png` |
-| `components.json` | `website/public/components.json` and `website/src/data/alikit-components.json` |
+| `website/src/content/docs/components/*.mdx` | `src/content/docs/components/*.mdx` |
+| `website/src/content/docs/components.md` | `src/content/docs/components/catalog.mdx` |
+| `website/src/content/docs/manifest.mdx` | `src/content/docs/docs/reference/manifest.mdx` |
+| `website/src/content/docs/compatibility.md` | `src/content/docs/docs/reference/compatibility.md` |
+| `website/public/captures/*.png` | `public/captures/*.png` |
+| `components.json` | `public/components.json` and `src/data/alikit-components.json` |
 
 Content is fetched from `raw.githubusercontent.com` at the pinned SHA, so the
 script needs no local alicorn-kit checkout and behaves the same on Windows and
@@ -107,24 +115,39 @@ Linux. Link rewrites and sidebar order are applied at sync time; edit those in
 | `src/components/CatalogCard.astro` | Catalog card used by the component overview. |
 | `src/content/docs/docs/` | Guide, reference, research, development, and project pages. |
 | `src/content/docs/components/` | Synced AliKit component pages (do not edit by hand). |
-| `src/styles/docs.css` | Alicorn palette and typography for Starlight. |
-| `src/styles/catalog.css` | Catalog grid, capture, and contract styles. |
-| `src/styles/portal.css` | Responsive portal design. |
+| `src/styles/` | Alicorn palette, catalog, and portal styles. |
 | `src/data/site.ts` | Shared project facts and links. |
 | `public/captures/` | Native PNG previews, synced from AliKit. |
 | `public/components.json` | Machine-readable component registry, synced from AliKit. |
 | `public/assets/`, `public/fonts/` | Product screenshot and bundled Atkinson Hyperlegible fonts. |
+| `scripts/` | Catalog sync and built-site link crawl. |
 
-The repository documentation remains the normative, detailed reference. Website
-pages summarize it and link to the relevant source files.
+The Alicorn repository documentation remains the normative, detailed reference.
+Website pages summarize it and link to the relevant source files.
 
 ## Deploy
 
-`.github/workflows/pages.yml` builds and deploys on a push to `master` that
-touches `website/**` or `docs/**`, and on manual dispatch. It uses the standard
-`configure-pages` / `upload-pages-artifact` / `deploy-pages` actions, verifies
-the AliKit pin, builds with the Pages base path, and crawls internal links
-before uploading `website/dist`.
+`.github/workflows/pages.yml` builds and deploys on a push to `main` and on
+manual dispatch. It uses the standard `configure-pages` /
+`upload-pages-artifact` / `deploy-pages` actions, verifies the AliKit pin,
+builds with the Pages base path, and crawls internal links before uploading
+`dist`.
 
-The former AliKit standalone site is retired; its repository now serves a
-redirect to `/components/` here.
+## Private repository Pages caveat
+
+GitHub Pages can publish from a private repository only on a paid plan (GitHub
+Team or Enterprise for organizations; Free organizations and personal Free
+accounts cannot publish Pages from private repositories). Depending on the plan,
+the published site is world-readable by default, and access control ("Private"
+site visibility, signed-in viewers only) is an Enterprise Cloud feature. If this
+organization is on the Free plan, either upgrade the plan or publish the built
+output to a separate public repository while this source stays private. Verify
+the deployed URL with an unauthenticated request after any plan or visibility
+change.
+
+## History
+
+This repository was split from the Alicorn repository's `website/` directory
+with `git subtree split -P website` at Alicorn commit `4182ae1`, so the site
+keeps its full file history. The former standalone AliKit catalog site is
+retired; alicorn-kit keeps only a redirect to `/components/` here.
