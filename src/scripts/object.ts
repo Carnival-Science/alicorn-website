@@ -1,5 +1,4 @@
 import { createGlassSky } from '../lib/glass-sky';
-import type { StageMount } from '../lib/stage';
 
 const $ = <T extends Element>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
 const $$ = <T extends Element>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
@@ -17,10 +16,10 @@ const statusEl = $<HTMLElement>('[data-status]');
 const status = (text: string) => { statusEl.textContent = text; };
 let standby = true;
 const glass = createGlassSky(skyCanvas, { tile: 26 });
+const offset = still ? Number(stillParam) || 40 : 20 + Math.random() * 400;
 if (glass) {
   skyCanvas.dataset.ready = 'true';
   // start somewhere in the sequence so every visit opens on a different sky
-  const offset = still ? Number(stillParam) || 40 : 20 + Math.random() * 400;
   glass.frame(offset);
   let visible = true;
   let last = 0;
@@ -131,33 +130,59 @@ document.addEventListener('click', async (e) => {
   setTimeout(() => { b.textContent = label; }, 1400);
 });
 
-/* ── the stage: reserved for an Alicorn WebGPU build ───────────────────── */
+/* ── the stage: the Alicorn app compiled for WebGPU ────────────────────── */
 const mount = $<HTMLElement>('[data-mount]');
 const lamp = $<HTMLElement>('[data-lamp]');
 const adapterEl = $('[data-adapter]');
 
-(async () => {
+// The demo app lays out for a desktop-sized stage. Narrower than this the
+// stage keeps its sky, and the app is only fetched if the stage grows.
+const MIN_STAGE_WIDTH = 600;
+
+async function boot() {
   const gpu = (navigator as Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }).gpu;
   const adapter = gpu ? await gpu.requestAdapter().catch(() => null) : null;
   adapterEl.textContent = adapter ? 'webgpu ready' : gpu ? 'no webgpu adapter' : 'webgpu unavailable';
-  const module = mount.dataset.module;
-  if (!module) return;
+  // `?still` keeps the sky for captures; so does a browser that cannot run the app
+  if (mount.dataset.live === undefined || still) return;
+  if (!adapter) { lamp.dataset.state = 'error'; status('cannot mount · sky only'); return; }
+  if (mount.clientWidth < MIN_STAGE_WIDTH) {
+    status('sky only · app needs a wider stage');
+    const watch = new ResizeObserver(() => {
+      if (mount.clientWidth < MIN_STAGE_WIDTH) return;
+      watch.disconnect();
+      void run();
+    });
+    watch.observe(mount);
+    return;
+  }
+  void run();
+}
+
+async function run() {
   standby = false;
-  if (!adapter) { lamp.dataset.state = 'error'; status('cannot mount'); return; }
   const appCanvas = $<HTMLCanvasElement>('[data-stage-canvas]');
   const controller = new AbortController();
   addEventListener('pagehide', () => controller.abort(), { once: true });
   try {
     status('loading module');
-    const { default: run } = (await import(/* @vite-ignore */ module)) as { default: StageMount };
+    const { default: mountApp } = await import('../lib/stage-loader');
     appCanvas.hidden = false;
     $<HTMLElement>('[data-standby]').hidden = true;
     lamp.dataset.state = 'live';
-    const teardown = await run({ canvas: appCanvas, signal: controller.signal, status });
+    const fail = (text: string) => { lamp.dataset.state = 'error'; status(text); };
+    const teardown = await mountApp({ canvas: appCanvas, signal: controller.signal, status, error: fail });
     if (teardown) controller.signal.addEventListener('abort', teardown);
     status('running');
   } catch (error) {
+    // fall back to the sky, held on one frame
+    appCanvas.hidden = true;
+    $<HTMLElement>('[data-standby]').hidden = false;
+    glass?.resize();
+    glass?.frame(offset);
     lamp.dataset.state = 'error';
     status('failed: ' + (error instanceof Error ? error.message : 'unknown'));
   }
-})();
+}
+
+void boot();

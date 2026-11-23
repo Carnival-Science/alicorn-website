@@ -35,12 +35,27 @@ repaint with a raster dissolve.
 
 ### The stage
 
-`src/lib/stage.ts` reserves the stage for an Alicorn app built for WebGPU. Set
-`stage.module` to the URL of an ES module whose default export is a
-`StageMount`. It receives the canvas, an abort signal, and a status callback.
-Then replace `stage.source` with the files a visitor can open from
-**Peek source**. Until then the stage shows the glass sky, and the drawer
-shows the documented starter, marked as a placeholder.
+The stage runs a real Alicorn app, compiled to WebAssembly and drawn with the
+WebGPU renderer.
+
+| Path | Role |
+|---|---|
+| `stage/app/main.odin` | The app. Ordinary `alicorn:ui` code. |
+| `stage/build.sh` | Compiles it for `js_wasm32` and copies Alicorn's browser host files. |
+| `public/stage/` | The build output, committed because CI does not build Odin. |
+| `src/lib/stage-loader.ts` | Supplies the ids the host expects, loads its scripts, and starts the app. |
+| `src/lib/stage.ts` | Stage config and the `StageMount` contract. The source drawer shows the app and the loader. |
+
+Rebuild after changing the app or updating Alicorn:
+
+```sh
+./stage/build.sh [path/to/Alicorn]   # defaults to ../alicorn
+```
+
+It needs Odin and `wasm-ld` (LLVM's lld; Homebrew's is keg-only and the script
+finds it). The app mounts in browsers that expose WebGPU, once the stage is at
+least 600 px wide. Otherwise, and under `?still`, the stage keeps the glass
+sky. Set `live: false` in `stage.ts` to put the stage back on standby.
 
 ## Build locally
 
