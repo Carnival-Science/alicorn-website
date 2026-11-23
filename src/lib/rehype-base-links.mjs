@@ -3,8 +3,8 @@
  *
  * Astro applies `base` to routes it generates, but it does not rewrite absolute
  * paths written in content. The consolidated site is served from
- * `https://carnival-science.github.io/alicorn/`, so `/docs/...` must become
- * `/alicorn/docs/...`. Only internal, root-absolute values are touched;
+ * `https://carnival-science.github.io/Alicorn/`, so `/docs/...` must become
+ * `/Alicorn/docs/...`. Only internal, root-absolute values are touched;
  * external URLs, protocol-relative URLs, and fragments are left alone.
  *
  * Both plain HTML elements and MDX JSX elements are handled: content pages mix

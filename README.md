@@ -2,7 +2,7 @@
 
 The single public documentation site for Alicorn and its optional component
 library, AliKit. It is published on GitHub Pages at
-<https://carnival-science.github.io/alicorn/>.
+<https://carnival-science.github.io/Alicorn/>.
 
 The site has one Astro build with two surfaces:
 
@@ -32,9 +32,12 @@ npm run preview
 
 ## Base path
 
-GitHub Pages serves a project site under `/alicorn/`, so the build receives
-`PUBLIC_BASE_PATH=/alicorn`. `PUBLIC_SITE_URL` is the origin used for canonical
-and social URLs. Both are build-time only and default to `/` and unset.
+GitHub Pages serves a project site under the repository path. This repository is
+`Alicorn`, so the deployed base is `/Alicorn/` and Pages URLs are
+case-sensitive: the lowercase `/alicorn/` does not serve the site. The Pages
+workflow takes the base from `actions/configure-pages`, so no casing is
+hard-coded. `PUBLIC_SITE_URL` is the origin used for canonical and social URLs.
+Both are build-time only and default to `/` and unset.
 
 Because Astro does not rewrite absolute links written in content, two helpers
 apply the base:
@@ -47,7 +50,7 @@ apply the base:
 Verify a base-path build locally before publishing:
 
 ```powershell
-$env:PUBLIC_BASE_PATH='/alicorn'
+$env:PUBLIC_BASE_PATH='/Alicorn'
 $env:PUBLIC_SITE_URL='https://carnival-science.github.io'
 npm run build
 npm run check:links
