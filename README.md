@@ -4,7 +4,7 @@ The single public documentation site for Alicorn and its optional component
 library, AliKit. It is published on GitHub Pages at
 <https://carnival-science.github.io/Alicorn/>.
 
-The site has one Astro build with two surfaces:
+The site has one Astro build with three surfaces:
 
 | Route | Contents |
 |---|---|
@@ -71,6 +71,9 @@ The pin is `website/alikit-catalog.json`. To publish a new AliKit revision:
 2. Run `npm run sync:catalog` from `website/`.
 3. Review the content and capture diff, then `npm run build`.
 4. Commit the prose, the captures, `components.json`, and the pin together.
+
+The pin may intentionally lag `alicorn-kit` main when a newer commit is still a
+prototype; publish a reviewed catalog revision, not every upstream commit.
 
 `npm run check:catalog` re-fetches the catalog and exits non-zero when the
 committed copy is stale. The Pages workflow runs it before every deploy, so the
