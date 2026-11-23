@@ -1,0 +1,94 @@
+---
+// Development-only material playground. getStaticPaths returns nothing in
+// production builds, so /lab/material/ exists only under `npm run dev`.
+import '../../styles/lab.css';
+import { presets } from '../../lib/glass/material';
+
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { page: 'material' } }] : [];
+}
+
+// footage stays out of the build: Vite serves it from the repo in dev
+const footage = `/@fs${process.cwd()}/lab/footage`;
+const scenes = [
+  ['sky', 'Sky · procedural'],
+  ['foliage', 'Foliage · procedural'],
+  ['ocean', 'Ocean · procedural'],
+  ['video:sky', 'Sky · footage'],
+  ['video:foliage', 'Foliage · footage'],
+  ['video:ocean', 'Ocean · footage'],
+  ['image:sky', 'Sky · still photo'],
+];
+const sliders: Array<[string, string, number, number, number]> = [
+  ['tile', 'Tile (CSS px)', 6, 40, 1],
+  ['gap', 'Separation', 0, 0.25, 0.005],
+  ['round', 'Rounding', 0, 1, 0.01],
+  ['refract', 'Refraction', 0, 1, 0.01],
+  ['gather', 'Averaging', 0, 1, 0.01],
+  ['diffuse', 'Diffusion', 0, 1, 0.01],
+  ['rough', 'Surface roughness', 0, 0.6, 0.01],
+  ['imperfect', 'Imperfection', 0, 1, 0.01],
+  ['highlight', 'Highlights', 0, 1, 0.01],
+  ['reflect', 'Reflection', 0, 1, 0.01],
+  ['tint', 'Glass tint', 0, 1, 0.01],
+  ['bubbles', 'Bubbles', 0, 0.5, 0.01],
+  ['grain', 'Grain', 0, 1, 0.01],
+  ['saturation', 'Saturation', 0, 1.5, 0.01],
+  ['levels', 'Posterise steps', 0, 16, 1],
+  ['duotone', 'Duotone', 0, 1, 0.01],
+  ['groutScene', 'Seams show the scene', 0, 1, 0.01],
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Material lab — Alicorn</title>
+  </head>
+  <body class="lab" data-footage={footage}>
+    <main class="lab-main">
+      <div class="lab-stage" data-stage>
+        <canvas data-canvas></canvas>
+        <div class="lab-labels" data-labels></div>
+      </div>
+      <p class="lab-readout" data-readout>…</p>
+    </main>
+    <form class="lab-panel" data-panel>
+      <h1>Glass material lab</h1>
+      <label>Scene <select name="scene">{scenes.map(([v, l]) => <option value={v}>{l}</option>)}</select></label>
+      <label>Treatment <select name="preset">{Object.keys(presets).map((p) => <option value={p}>{p}</option>)}</select></label>
+      <div class="lab-row">
+        <label><input type="checkbox" name="compare" /> Compare all</label>
+        <label><input type="checkbox" name="bypass" /> Bypass glass</label>
+      </div>
+      <fieldset>
+        <legend>Time</legend>
+        <div class="lab-row">
+          <button type="button" data-play>Pause</button>
+          <button type="button" data-step="-1">−1 s</button>
+          <button type="button" data-step="1">+1 s</button>
+          <label>t <input type="number" name="t" step="0.1" value="0" /></label>
+        </div>
+        <label>Speed <input type="range" name="speed" min="0" max="4" step="0.05" value="1" /><output data-out="speed">1</output></label>
+      </fieldset>
+      <fieldset>
+        <legend>Material</legend>
+        <label>Profile <select name="profile"><option value="0">flat</option><option value="1">cast</option><option value="2">lens</option><option value="3">pressed</option></select></label>
+        {sliders.map(([name, label, min, max, step]) => (
+          <label>{label} <input type="range" name={name} min={min} max={max} step={step} /><output data-out={name}></output></label>
+        ))}
+      </fieldset>
+      <div class="lab-row">
+        <button type="button" data-capture>Capture PNG</button>
+        <button type="button" data-bench>Measure</button>
+        <button type="button" data-link>Copy link</button>
+      </div>
+      <p class="lab-note">Shortcuts: space play/pause, ←/→ step, b bypass, c compare. <code>window.__lab</code> exposes <code>set</code>, <code>at</code>, <code>png</code> and <code>bench</code> for scripted captures.</p>
+    </form>
+    <script>
+      import '../../scripts/lab';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+/* Material lab: development only. Plain, dense, out of the way of the art. */
+:root { color-scheme: light; --ground: #d7d9d0; --ink: #2c2e2b; --muted: #6f726b; --line: #a3a69e; }
+* { box-sizing: border-box; }
+body.lab { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) 320px; min-height: 100vh; background: var(--ground); color: var(--ink); font: 12px/1.45 ui-monospace, "SF Mono", Menlo, monospace; }
+.lab-main { padding: 24px; display: grid; align-content: start; gap: 10px; }
+.lab-stage { position: relative; width: min(100%, 1040px); aspect-ratio: 16 / 10; background: #c8cac3; }
+.lab-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lab-labels { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; pointer-events: none; }
+.lab-labels span { align-self: start; justify-self: start; margin: 6px; padding: 1px 6px; background: rgb(20 24 22 / .72); color: #fff; }
+.lab-readout { margin: 0; color: var(--muted); }
+.lab-panel { padding: 18px 16px 30px; background: #e6e7e1; border-left: 1px solid var(--line); overflow-y: auto; max-height: 100vh; position: sticky; top: 0; }
+.lab-panel h1 { margin: 0 0 12px; font-size: 13px; }
+.lab-panel label { display: grid; grid-template-columns: 1fr; gap: 2px; margin: 0 0 8px; }
+.lab-panel label:has(input[type="range"]) { grid-template-columns: 1fr 3.5em; }
+.lab-panel label:has(input[type="range"]) input { grid-column: 1; }
+.lab-panel label:has(input[type="range"]) output { grid-column: 2; grid-row: 1 / span 2; align-self: end; text-align: right; }
+.lab-panel select, .lab-panel input[type="number"] { font: inherit; padding: 2px 4px; }
+.lab-panel fieldset { border: 1px solid var(--line); margin: 10px 0; padding: 8px 10px 4px; }
+.lab-panel legend { padding: 0 4px; color: var(--muted); }
+.lab-row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: 8px; }
+.lab-row label { display: inline-flex; gap: 4px; align-items: center; margin: 0; }
+.lab-row input[type="number"] { width: 6em; }
+.lab-panel button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); background: #f3f4ef; cursor: pointer; }
+.lab-panel button:hover { background: var(--ink); color: #fff; }
+.lab-note { color: var(--muted); }
+@media (max-width: 800px) { body.lab { grid-template-columns: 1fr; } .lab-panel { position: static; max-height: none; border-left: 0; } }

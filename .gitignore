@@ -1,3 +1,6 @@
 node_modules/
 dist/
 .astro/
+
+# original downloads for the material lab (see lab/footage/SOURCES.md)
+lab/footage-raw/

@@ -45,7 +45,7 @@ button { font: inherit; color: inherit; }
 .skip-link { position: fixed; z-index: 20; top: 0; left: 1rem; transform: translateY(-120%); padding: .5rem .8rem; background: var(--ink); color: var(--sheet); font: 11px var(--mono); }
 .skip-link:focus { transform: translateY(.6rem); }
 
-.sheet { min-height: 100vh; display: flex; flex-direction: column; }
+.sheet { min-height: 100vh; display: flex; flex-direction: column; overflow-x: clip; }
 
 /* ── top: pixel nav over a heavy rule ─────────────────────────────────── */
 .topnav { padding: 56px var(--inset) 12px calc(var(--inset) + 210px + var(--gap)); }
@@ -100,16 +100,29 @@ button { font: inherit; color: inherit; }
 .index a:hover { color: var(--blue); }
 .index em { font-style: normal; color: var(--blue); }
 
+/* a few escaped tiles in the corner of the sheet */
+.body { position: relative; }
+.ornament { position: absolute; z-index: 0; left: 0; top: 0; width: 320px; height: 240px; pointer-events: none; display: block; }
+.ornament:not([data-ready]) { display: none; }
+.brand, .copy { position: relative; z-index: 1; }
+
 /* ── the stage ────────────────────────────────────────────────────────── */
-.stage { margin: 6px 0 0; min-width: 0; }
-.stage-frame { padding: 9px; border: 1px solid var(--line); background: var(--sheet); }
-.mount { position: relative; width: 100%; overflow: hidden; background: var(--paper); }
+.stage { position: relative; margin: 6px 0 0; min-width: 0; }
+/* the glass wall sits behind the frame and runs past it, so tiles can leak
+   out of the window; the insets keep them off the text column */
+.glass {
+  --leak-l: 44px; --leak-r: 150px; --leak-t: 40px; --leak-b: 8px;
+  position: absolute; z-index: 0; pointer-events: none; display: block;
+  left: calc(var(--leak-l) * -1); top: calc(var(--leak-t) * -1);
+  width: calc(100% + var(--leak-l) + var(--leak-r)); height: calc(100% + var(--leak-t) + var(--leak-b));
+}
+.stage-frame { position: relative; z-index: 1; padding: 9px; border: 1px solid var(--line); }
+.mount { position: relative; width: 100%; overflow: hidden; }
 .mount > canvas { display: block; width: 100%; height: 100%; }
 .standby { position: absolute; inset: 0; }
 .standby[hidden] { display: none; }
-.mosaic { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* without WebGL: a still sky behind a drawn tile grid */
-.mosaic:not([data-ready]) {
+.stage:has(.glass:not([data-ready])) .mount {
   background:
     linear-gradient(90deg, #d6d8d2 1.5px, transparent 1.5px) 0 0 / 26px 26px,
     linear-gradient(#d6d8d2 1.5px, transparent 1.5px) 0 0 / 26px 26px,
@@ -117,11 +130,12 @@ button { font: inherit; color: inherit; }
     linear-gradient(#1a46b2, #6f9fe0 70%, #a9c7ef);
 }
 .stage-caption { position: absolute; z-index: 1; left: 7%; top: 14%; margin: 0; color: #fbfcf7; font: 300 clamp(20px, 2.4vw, 30px)/1 var(--sans); letter-spacing: -.01em; text-shadow: 0 1px 12px rgb(14 40 110 / .45), 0 0 2px rgb(14 40 110 / .3); }
-.stage-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 9px; font: 10.5px/1.5 var(--mono); color: var(--muted); }
+.stage-meta { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 9px; font: 10.5px/1.5 var(--mono); color: var(--muted); }
+.stage-name, .stage-status { background: var(--ground); padding: 0 4px; }
 .lamp { width: 6px; height: 6px; background: var(--blue); animation: blink 1.4s steps(1) infinite; }
 .lamp[data-state="live"] { animation: none; }
 .lamp[data-state="error"] { background: var(--signal); animation: none; }
-.stage-status { flex: 1; min-width: 0; }
+.stage-status { flex: 0 1 auto; min-width: 0; margin-right: auto; }
 .peek-toggle { border: 1px solid var(--line); background: var(--sheet); padding: 1px 9px; font: 10.5px/1.5 var(--mono); cursor: pointer; }
 .peek-toggle:hover, .peek-toggle[aria-expanded="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
 
@@ -183,5 +197,7 @@ button { font: inherit; color: inherit; }
   .panel p { max-width: none; }
   .peek { margin-right: 0; }
   .stage-status { flex-basis: 100%; order: 3; }
+  .glass { --leak-l: 16px; --leak-r: 16px; --leak-t: 24px; --leak-b: 8px; }
+  .ornament { width: 110px; height: 84px; }
   .legal { margin-top: 40px; }
 }

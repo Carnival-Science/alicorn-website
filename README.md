@@ -27,12 +27,30 @@ The homepage is a quiet sheet in the manner of early-2000s studio sites. A
 small pixel-font nav (`src/lib/pixel-font.ts`) sits over a heavy rule and
 switches the text column between Runtime, Identity, AliKit, Build, and Notes.
 The app stage is on the right, and the documentation tabs hang from a second
-rule at the foot. On standby the stage shows a sky through square glass
-tiles (`src/lib/glass-sky.ts`, WebGL). Each tile gathers the light behind it
+rule at the foot. The stage sits in a wall of square glass tiles with a sky
+behind it (`src/lib/glass/`, WebGL). Each tile gathers the light behind it
 the way a pixel does, and the clouds and sunlight breathe on slow, unrelated
-periods. It renders at 30 fps and pauses when it is off screen. Panel changes
-repaint with a raster dissolve.
+periods. Some tiles have escaped the frame: they cascade from its top-right
+corner, drift a little to the left, and gather in the top-left corner of the
+sheet. When the app is running, the wall inside the frame is switched off and
+only the escaped tiles remain. The glass renders at 30 fps (the ornament at
+15), pauses when hidden or off screen, and holds one frame under reduced
+motion. Panel changes repaint with a raster dissolve.
 `?still` renders the settled page without motion for captures.
+
+### The glass material
+
+`src/lib/glass/` separates the world from the glass:
+
+| File | Role |
+|---|---|
+| `scenes.ts` | Procedural scenes (sky, foliage, ocean) rendered for any time `t`. |
+| `material.ts` | The tile material and its presets, plus the leak mask that lets tiles escape a frame. |
+| `renderer.ts` | Connects a source (procedural, video or still) to one or more material passes on a canvas. Video uploads only on new decoded frames. |
+| `surface.ts` | Puts a glass surface on the page: visibility, reduced motion, resizing and cleanup. |
+
+The material is still being settled in a development-only lab. See
+[`lab/README.md`](lab/README.md).
 
 ### The stage
 

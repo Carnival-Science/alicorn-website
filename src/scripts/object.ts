@@ -1,4 +1,5 @@
-import { createGlassSky } from '../lib/glass-sky';
+import { mountSurface } from '../lib/glass/surface';
+import { presets } from '../lib/glass/material';
 
 const $ = <T extends Element>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
 const $$ = <T extends Element>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
@@ -10,32 +11,25 @@ const still = stillParam !== null;
 if (still) document.documentElement.classList.add('is-still');
 const quiet = () => still || reduced.matches;
 
-/* ── standby: a sky behind square glass ───────────────────────────────── */
-const skyCanvas = $<HTMLCanvasElement>('[data-mosaic]');
+/* ── the glass: a sky behind square tiles, leaking past the stage ──────── */
 const statusEl = $<HTMLElement>('[data-status]');
 const status = (text: string) => { statusEl.textContent = text; };
-let standby = true;
-const glass = createGlassSky(skyCanvas, { tile: 26 });
-const offset = still ? Number(stillParam) || 40 : 20 + Math.random() * 400;
-if (glass) {
-  skyCanvas.dataset.ready = 'true';
-  // start somewhere in the sequence so every visit opens on a different sky
-  glass.frame(offset);
-  let visible = true;
-  let last = 0;
-  const begin = performance.now();
-  const tick = (now: number) => {
-    if (!standby) return;
-    // 30 frames a second is enough for weather; skip work when out of view
-    if (visible && !document.hidden && now - last > 33) {
-      last = now;
-      glass.frame(offset + (now - begin) / 1000);
-    }
-    requestAnimationFrame(tick);
-  };
-  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(skyCanvas);
-  new ResizeObserver(() => { if (!standby) return; glass.resize(); glass.frame(offset + (quiet() ? 0 : (performance.now() - begin) / 1000)); }).observe(skyCanvas);
-  if (!quiet()) requestAnimationFrame(tick);
+// start somewhere in the sequence so every visit opens on a different sky
+const start = still ? Number(stillParam) || 40 : 20 + Math.random() * 400;
+const stageGlass = mountSurface($<HTMLCanvasElement>('[data-glass]'), {
+  scene: 'sky', params: presets.cast, frame: $<HTMLElement>('[data-mount]'),
+  // 24 × 15 tiles fill the 16:10 stage exactly; tiles escape up and to the
+  // right, and drift a little out to the left
+  columns: 24, leak: 1.1, reach: 5, corners: [[1, 0, 1.25], [0, 0.85, 0.45]],
+  fps: 30, start, still: quiet(),
+});
+// an ornament: a few tiles of the same sky at the corner of the sheet
+const ornament = document.querySelector<HTMLCanvasElement>('[data-ornament]');
+if (ornament) {
+  mountSurface(ornament, {
+    scene: 'sky', params: { ...presets.cast, seed: 3 }, anchor: { x: 0, y: 0 },
+    leak: 1.6, reach: 3.2, fps: 15, start: start + 9, still: quiet(),
+  });
 }
 status('standby · awaiting module');
 
@@ -160,7 +154,6 @@ async function boot() {
 }
 
 async function run() {
-  standby = false;
   const appCanvas = $<HTMLCanvasElement>('[data-stage-canvas]');
   const controller = new AbortController();
   addEventListener('pagehide', () => controller.abort(), { once: true });
@@ -169,17 +162,17 @@ async function run() {
     const { default: mountApp } = await import('../lib/stage-loader');
     appCanvas.hidden = false;
     $<HTMLElement>('[data-standby]').hidden = true;
+    stageGlass?.setHollow(true);
     lamp.dataset.state = 'live';
     const fail = (text: string) => { lamp.dataset.state = 'error'; status(text); };
     const teardown = await mountApp({ canvas: appCanvas, signal: controller.signal, status, error: fail });
     if (teardown) controller.signal.addEventListener('abort', teardown);
     status('running');
   } catch (error) {
-    // fall back to the sky, held on one frame
+    // fall back to the sky
     appCanvas.hidden = true;
     $<HTMLElement>('[data-standby]').hidden = false;
-    glass?.resize();
-    glass?.frame(offset);
+    stageGlass?.setHollow(false);
     lamp.dataset.state = 'error';
     status('failed: ' + (error instanceof Error ? error.message : 'unknown'));
   }
