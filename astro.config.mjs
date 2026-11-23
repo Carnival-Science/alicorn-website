@@ -21,7 +21,9 @@ export default defineConfig({
       tagline: 'Direct to write. Retained to run.',
       favicon: '/favicon.svg',
       customCss: ['./src/styles/docs.css', './src/styles/catalog.css'],
-      editLink: { baseUrl: repository + '/edit/master/website/' },
+      // Website pages live in this repository; the project repository stays the
+      // social/source link below.
+      editLink: { baseUrl: 'https://github.com/Carnival-Science/alicorn-website/edit/main/' },
       lastUpdated: false,
       pagination: true,
       credits: false,

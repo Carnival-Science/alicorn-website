@@ -6,7 +6,7 @@
  * Astro's base path, directory-style routes, generated assets, Pagefind files,
  * and copied native captures. External URLs are counted, not fetched.
  *
- *   PUBLIC_BASE_PATH=/alicorn node scripts/check-links.mjs
+ *   PUBLIC_BASE_PATH=/alicorn-website node scripts/check-links.mjs
  */
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { extname, join } from 'node:path';

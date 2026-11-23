@@ -8,10 +8,10 @@
  * single public documentation surface, so the catalog is copied here at a
  * pinned revision instead of forked.
  *
- * The pin lives in `website/alikit-catalog.json`. To update it:
+ * The pin lives in `alikit-catalog.json` at the repository root. To update it:
  *
  *   1. Change `revision` to the alicorn-kit commit to publish.
- *   2. Run `npm run sync:catalog` from `website/`.
+ *   2. Run `npm run sync:catalog` from the repository root.
  *   3. Review the content diff, run `npm run build`, and commit both.
  *
  * `npm run check:catalog` (or `--check`) fetches the same files and exits

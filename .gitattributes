@@ -1,0 +1,8 @@
+# The AliKit catalog sync compares generated pages byte for byte. Keep their
+# checked out representation identical on Windows, macOS, and Linux.
+src/content/docs/components/*.mdx text eol=lf
+src/content/docs/components.mdx text eol=lf
+src/content/docs/docs/reference/manifest.mdx text eol=lf
+src/content/docs/docs/reference/compatibility.md text eol=lf
+public/components.json text eol=lf
+src/data/alikit-components.json text eol=lf
