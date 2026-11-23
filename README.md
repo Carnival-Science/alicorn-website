@@ -55,7 +55,7 @@ Rebuild after changing the app or updating Alicorn:
 
 It needs Odin and `wasm-ld` (LLVM's lld; Homebrew's is keg-only and the script
 finds it). The app mounts in browsers that expose WebGPU, once the stage is at
-least 600 px wide. Otherwise, and under `?still`, the stage keeps the glass
+least 540 px wide. Otherwise, and under `?still`, the stage keeps the glass
 sky. Set `live: false` in `stage.ts` to put the stage back on standby.
 
 ## Build locally

@@ -137,7 +137,7 @@ const adapterEl = $('[data-adapter]');
 
 // The demo app lays out for a desktop-sized stage. Narrower than this the
 // stage keeps its sky, and the app is only fetched if the stage grows.
-const MIN_STAGE_WIDTH = 600;
+const MIN_STAGE_WIDTH = 540;
 
 async function boot() {
   const gpu = (navigator as Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }).gpu;
