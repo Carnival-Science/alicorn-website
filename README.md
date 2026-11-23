@@ -133,6 +133,10 @@ manual dispatch. It uses the standard `configure-pages` /
 builds with the Pages base path, and crawls internal links before uploading
 `dist`.
 
+A separate `Build website` workflow runs the catalog pin check, the base-path
+build, and the internal link crawl on every push and pull request, so the build
+stays verified even while Pages deployment is unavailable.
+
 ## Private repository Pages caveat
 
 GitHub Pages can publish from a private repository only on a paid plan (GitHub
