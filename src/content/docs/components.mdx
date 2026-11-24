@@ -1,6 +1,6 @@
 ---
 title: Components
-description: The AliKit component catalog for Alicorn — native previews, copyable Odin source, and explicit ownership, keyboard, accessibility, and test contracts.
+description: The AliKit component catalog for Alicorn — live browser previews, copyable Odin source, and explicit ownership, keyboard, accessibility, and test contracts.
 sidebar:
   label: AliKit overview
 ---
@@ -11,8 +11,6 @@ import pin from '../../../alikit-catalog.json';
 
 export const catalog = manifest.components.filter((component) => component.page);
 export const support = manifest.components.filter((component) => !component.page);
-export const captureFor = (component) =>
-  `captures/${component.capture ? component.capture.split('/').pop() : `${component.id}.png`}`;
 export const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 <div class="lede">
@@ -24,7 +22,7 @@ component lifecycle.
 
 These pages are the public catalog. They are written where the components live — in the
 [AliKit repository](https://github.com/samanshaiza004/alicorn-kit) — and published here at the
-pinned revision `{pin.revision.slice(0, 7)}`. Each page carries the native preview, the copyable
+pinned revision `{pin.revision.slice(0, 7)}`. Each page carries the live preview, the copyable
 implementation, the parts, the theme recipe, the input and accessibility contract, the conformance
 tests, the API, and the limits.
 
@@ -50,15 +48,14 @@ second policy engine. Each component page states the exact split for that compon
       title={component.name}
       packageName={component.package}
       purpose={component.purpose}
-      capture={captureFor(component)}
       badges={[component.kind, component.status]}
     />
   ))}
 </div>
 
-The previews are genuine SDL_GPU windows captured from the examples in the AliKit repository. The
-site does not reimplement a component in HTML or JavaScript. Interactive WebGPU previews are a
-later catalog step; the capture and the copyable source are the v1 contract.
+Each preview runs the component's own AliKit example, compiled to WebAssembly and presented
+through Alicorn's WebGPU renderer. The site does not reimplement components in HTML or JavaScript.
+Browsers without WebGPU receive an availability message instead of a desktop screenshot.
 
 ### Support packages
 
@@ -91,10 +88,10 @@ Every page follows the same order so the five-point Alicorn authoring standard s
 | Keyboard and accessibility contracts | **Keyboard and accessibility contract** |
 | `testui` conformance examples | **Conformance tests** |
 
-Each page also lists the public API, the known limits, the exact Alicorn pin used for the capture,
+Each page also lists the public API, the known limits, and the exact Alicorn pin used to compile its preview,
 and a source map back to the package, tests, example, and theme data.
 
-- **Preview** is the native capture, not a browser recreation.
+- **Preview** runs the component's browser example through Alicorn's WebGPU renderer.
 - **Responsibility split** names what Alicorn, the package, and the application own.
 - **Installation** and **Copyable implementation** are the two consumption paths.
 - **Compose the parts** is the path for applications that own the shell.
@@ -122,7 +119,7 @@ odin build . -collection:alicorn=<alicorn> -collection:alikit=<alicorn-kit>
 
 [`components.json`](https://github.com/samanshaiza004/alicorn-kit/blob/main/components.json) is the
 machine-readable catalog. It records each entry's identity, package, source, tests, example,
-capture, dependencies, owned state, parts, keyboard and accessibility contract, theme roles, API,
+dependencies, owned state, parts, keyboard and accessibility contract, theme roles, API,
 and limits. The manifest is a catalog seed, not a package manifest: it declares no binary artifact,
 semantic version, or install command.
 

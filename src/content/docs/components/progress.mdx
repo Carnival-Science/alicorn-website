@@ -5,7 +5,6 @@ sidebar:
   order: 6
 ---
 
-import Capture from '../../../components/Capture.astro';
 import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
@@ -17,10 +16,7 @@ value, range, and indeterminate phase.
 
 ## Preview
 
-<ComponentDemo id="progress" capture="captures/progress.png" height={480} />
-
-<Capture src="captures/progress.png" alt="Native progress window showing four determinate downloads at 0, 25, 60, and 100 percent plus an indeterminate Loading workspace bar" caption="Native SDL_GPU capture of examples/progress at Alicorn 47c9d4a. The example theme supplies the track and teal fill roles; the value text and segment geometry carry the state." />
-
+<ComponentDemo id="progress" height={480} />
 
 ## Responsibility split
 

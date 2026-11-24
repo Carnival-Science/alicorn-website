@@ -95,7 +95,7 @@ carries the same fields in machine-readable form.
 
 | Section | Must state |
 | --- | --- |
-| Preview | The native capture and the exact Alicorn revision it was taken at. |
+| Preview | The live browser example and the exact Alicorn revision it was compiled against. |
 | Responsibility split | What Alicorn, the package, and the application own. |
 | Installation | The import path and collection arguments, plus the copy recipe. |
 | Copyable implementation | A runnable call site and the files that make it complete. |
@@ -116,4 +116,4 @@ carries the same fields in machine-readable form.
 - The theme contract reports configured and missing roles.
 - Keyboard, pointer, and semantic activation produce the same one-shot result.
 - The final turn has no remaining description or presentation work.
-- The page states the capture revision and every known limit.
+- The page states the preview's Alicorn revision and every known limit.

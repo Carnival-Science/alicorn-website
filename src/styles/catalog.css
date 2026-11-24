@@ -33,16 +33,6 @@
   text-decoration: none;
 }
 
-.component-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
-  object-position: top center;
-  border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 3px;
-  background: #0b0d13;
-}
-
 .component-card code {
   color: var(--sl-color-text-accent);
   font-size: var(--sl-text-xs);
@@ -81,33 +71,6 @@
 }
 
 /* Component pages --------------------------------------------------------- */
-
-.capture-figure { margin: 1.25rem 0 1.75rem; }
-
-.capture {
-  display: block;
-  width: 100%;
-  max-width: 60rem;
-  border: 1px solid var(--sl-color-hairline);
-  border-radius: 5px;
-  background: #0b0d13;
-}
-
-.capture-caption {
-  margin: 0.45rem 0 0;
-  color: var(--sl-color-gray-3);
-  font-size: var(--sl-text-sm);
-  line-height: 1.5;
-}
-
-.preview-note {
-  border-inline-start: 3px solid #3e8fba;
-  border-radius: 0 4px 4px 0;
-  padding: 0.55rem 0.9rem;
-  background: var(--sl-color-gray-7);
-  color: var(--sl-color-gray-2);
-  font-size: var(--sl-text-sm);
-}
 
 .pin-note {
   border: 1px dashed var(--sl-color-hairline);

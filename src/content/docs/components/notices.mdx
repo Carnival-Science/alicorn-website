@@ -5,7 +5,6 @@ sidebar:
   order: 8
 ---
 
-import Capture from '../../../components/Capture.astro';
 import ComponentDemo from '../../../components/ComponentDemo.astro';
 
 <div class="lede">
@@ -17,10 +16,7 @@ capacity, live-region announcements, and one-shot expiry.
 
 ## Preview
 
-<ComponentDemo id="notices" capture="captures/notices.png" height={440} />
-
-<Capture src="captures/notices.png" alt="Native notices window with Post saved, Post warning, and Post error buttons and an inline offline warning card with Retry and Details actions" caption="Native SDL_GPU capture of examples/notices at Alicorn 47c9d4a. The inline card is an application-owned item; runtime toasts use Alicorn's own overlay and are not a second queue." />
-
+<ComponentDemo id="notices" height={440} />
 
 ## Responsibility split
 

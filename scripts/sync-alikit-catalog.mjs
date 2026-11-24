@@ -3,7 +3,7 @@
  * Sync the AliKit component catalog into the Alicorn website.
  *
  * AliKit stays the authoring home for component documentation: the package,
- * its tests, its native example, the capture, the page prose, and
+ * its tests, its browser demo, the page prose, and
  * `components.json` all live in the alicorn-kit repository. This site is the
  * single public documentation surface, so the catalog is copied here at a
  * pinned revision instead of forked.
@@ -45,7 +45,6 @@ const [, owner, repo] = match;
 const sourceRoot = pin.sourceRoot || 'website';
 
 const rawBase = `https://raw.githubusercontent.com/${owner}/${repo}/${revision}/`;
-const capturePattern = /^website\/public\/captures\/([^/]+\.png)$/;
 
 /** Text substitutions applied to synced pages so links resolve on this site. */
 const rewrites = [
@@ -71,19 +70,9 @@ async function fetchText(path, rewrite = true) {
   return rewrite ? within(text) : text;
 }
 
-async function fetchBytes(path) {
-  const url = rawBase + path;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText} for ${url}`);
-  }
-  return Buffer.from(await response.arrayBuffer());
-}
 
 /**
- * Height in pixels of the live demo on each page. The demos are the AliKit
- * examples running in the browser (stage/kit); a page without an entry has no
- * demo, and keeps its native capture alone.
+ * Height in pixels of each interactive browser demo.
  */
 const demoHeights = {
   'command-palette': 440,
@@ -101,25 +90,67 @@ const demoHeights = {
 };
 
 /**
- * Put the live WebGPU demo ahead of the native capture. AliKit's page ends its
- * preview with a note that the interactive preview is a later step; the demo
- * is that step, so the note goes.
+ * Replace AliKit's native screenshot section with the live WebGPU demo. Pages
+ * without an embed lose the screenshot and its import as well.
  */
 function withDemo(text, slug) {
   const height = demoHeights[slug];
-  if (!height) return text;
-  const capture = /<Capture src="(captures\/[a-z0-9-]+\.png)"/i.exec(text);
-  const note = /<div class="preview-note">[\s\S]*?<\/div>\n?/;
-  const importLine = "import Capture from '../../../components/Capture.astro';";
-  if (!capture || !note.test(text) || !text.includes(importLine)) {
-    console.warn(`warn: ${slug} has an unexpected preview section; no demo added`);
-    return text;
+  const captureImport = "import Capture from '../../../components/Capture.astro';\n";
+  const demoImport = "import ComponentDemo from '../../../components/ComponentDemo.astro';\n";
+  const captureTag = /<Capture\b[^>]*\/>\s*/i;
+  const note = /<div class="preview-note">[\s\S]*?<\/div>\s*/i;
+  let output = text;
+
+  if (height) {
+    output = output.replace(captureImport, demoImport);
+    if (!output.includes(demoImport)) {
+      output = output.replace(/(^---\n[\s\S]*?^---\n)/m, "$1" + demoImport);
+    }
+    const demo = '<ComponentDemo id="' + slug + '" height={' + height + '} />\n\n';
+    if (captureTag.test(output)) {
+      output = output.replace(captureTag, demo);
+    } else if (!output.includes('<ComponentDemo id="' + slug + '"')) {
+      output = output.replace(/(## Preview\s*\n)/, "$1\n" + demo);
+    }
+  } else {
+    output = output.replace(captureImport, "").replace(captureTag, "");
   }
-  const demo = `<ComponentDemo id="${slug}" capture="${capture[1]}" height={${height}} />\n\n`;
+
+  return output.replace(note, "");
+}
+
+function withoutCaptureMetadata(manifest) {
+  delete manifest.validation?.captures;
+  for (const component of manifest.components ?? []) {
+    delete component.capture;
+    delete component.captureNote;
+  }
+  return manifest;
+}
+
+function withoutCaptureManifestDocs(text) {
   return text
-    .replace(importLine, `${importLine}\nimport ComponentDemo from '../../../components/ComponentDemo.astro';`)
-    .replace(note, '')
-    .replace(/<Capture /, `${demo}<Capture `);
+    .replace(/^\|[^|\n]*capture[^|\n]*\|[^\n]*\r?\n/gim, "")
+    .replace(/^\s*"capture":\s*"[^"]*",\s*\r?\n/gm, "");
+}
+
+function withoutNativeCaptureCompatibility(text) {
+  return text
+    .replace(
+      /The native captures in this catalog were produced from the examples built against that Alicorn\s+revision with the SDL_GPU Direct3D 12 backend on Windows\./,
+      "The browser previews are compiled from the AliKit examples against the Alicorn revision recorded here and rendered by Alicorn's WebGPU host.",
+    )
+    .replace(
+      /4\. Rebuild the examples and re-capture the catalog with[\s\S]*?capture_catalog\.ps1[^\n]*\n/,
+      "4. Rebuild and verify every browser component preview in the Alicorn website.\n",
+    );
+}
+
+function withoutNativeCaptureCatalogText(text) {
+  return text
+    .replace(/native preview/gi, "interactive preview")
+    .replace(/native captures?/gi, "browser previews")
+    .replace(/capture, dependencies/gi, "dependencies");
 }
 
 function within(text) {
@@ -157,12 +188,11 @@ function rewriteCatalogLinks(text, entries) {
   return text;
 }
 
-const manifest = JSON.parse(await fetchText('components.json', false));
+const manifest = withoutCaptureMetadata(JSON.parse(await fetchText('components.json', false)));
 const components = manifest.components.filter((component) => component.page);
 
 /** @type {{ path: string, contents: string | Buffer }[]} */
 const outputs = [];
-const wantedCaptures = new Set();
 
 for (const [index, component] of components.entries()) {
   const slug = slugFromPage(component.page);
@@ -171,50 +201,33 @@ for (const [index, component] of components.entries()) {
     path: posix.join('src/content/docs/components', `${slug}.mdx`),
     contents: withSidebar(withDemo(page, slug), `sidebar:\n  order: ${index + 1}`),
   });
-
-  // The page is the authority for its preview; the manifest `capture` field is
-  // a secondary hint because older entries may omit it.
-  const referenced = [...page.matchAll(/captures\/[a-z0-9-]+\.png/gi)].map((match) => posix.basename(match[0]));
-  const capture = capturePattern.exec(component.capture || '');
-  if (capture) referenced.push(capture[1]);
-  if (referenced.length === 0) {
-    console.warn(`warn: ${component.id} names no native capture`);
-  }
-  for (const name of new Set(referenced)) wantedCaptures.add(name);
-}
-
-for (const name of [...wantedCaptures].sort()) {
-  outputs.push({
-    path: posix.join('public/captures', name),
-    contents: await fetchBytes(`website/public/captures/${name}`),
-  });
 }
 
 outputs.push(
   {
     path: 'src/content/docs/components/catalog.mdx',
     contents: withSidebar(
-      rewriteCatalogLinks(await fetchText(`${sourceRoot}/src/content/docs/components.md`), components),
+      withoutNativeCaptureCatalogText(rewriteCatalogLinks(await fetchText(`${sourceRoot}/src/content/docs/components.md`), components)),
       'sidebar:\n  label: Package catalog\n  order: 100',
     ),
   },
   {
     path: 'src/content/docs/docs/reference/manifest.mdx',
-    contents: await fetchText(`${sourceRoot}/src/content/docs/manifest.mdx`),
+    contents: withoutCaptureManifestDocs(await fetchText(`${sourceRoot}/src/content/docs/manifest.mdx`)),
   },
   {
     path: 'src/content/docs/docs/reference/compatibility.md',
-    contents: await fetchText(`${sourceRoot}/src/content/docs/compatibility.md`),
+    contents: withoutNativeCaptureCompatibility(await fetchText(`${sourceRoot}/src/content/docs/compatibility.md`)),
   },
   {
     path: 'public/components.json',
-    contents: await fetchText('components.json', false),
+    contents: JSON.stringify(manifest, null, 2) + '\n',
   },
   {
     // The overview page renders the catalog from the registry. `public/` cannot
     // be imported by Vite, so the same bytes are also written under src/data/.
     path: 'src/data/alikit-components.json',
-    contents: await fetchText('components.json', false),
+    contents: JSON.stringify(manifest, null, 2) + '\n',
   },
 );
 
@@ -235,7 +248,7 @@ for (const file of await listManaged('src/content/docs/components')) {
   }
 }
 for (const file of await listManaged('public/captures')) {
-  if (file.isFile() && file.name.endsWith('.png') && !wantedCaptures.has(file.name)) {
+  if (file.isFile() && /\.(?:png|jpe?g|webp|gif|avif)$/i.test(file.name)) {
     stale.push(posix.join('public/captures', file.name));
   }
 }
@@ -265,7 +278,7 @@ if (!check) {
 const label = check ? 'check' : 'sync';
 const changed = drift.length + stale.length;
 console.log(`${label}: alicorn-kit ${owner}/${repo}@${revision}`);
-console.log(`${label}: ${components.length} component pages, ${wantedCaptures.size} captures, manifest + compatibility + registry`);
+console.log(`${label}: ${components.length} component pages, live previews, manifest + compatibility + registry`);
 console.log(`${label}: ${changed === 0 ? 'already current' : `${changed} file(s) ${check ? 'out of date' : 'updated'}`}`);
 for (const path of drift) console.log(`  ${check ? 'stale' : 'wrote'} ${path}`);
 for (const path of stale) console.log(`  ${check ? 'extra' : 'removed'} ${path}`);
