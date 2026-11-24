@@ -11,6 +11,7 @@ package demo_palette_parts
 
 import "core:fmt"
 import alicorn "alicorn:runtime"
+import theme "alicorn:theme"
 import ui "alicorn:ui"
 import model "alikit:palette_model"
 import parts "alikit:palette_parts"
@@ -25,6 +26,7 @@ ITEMS := [6]model.Item{
 }
 
 App :: struct {
+	theme_id: alicorn.Style_Theme_ID,
 	query:   ui.Text_Buffer,
 	ready:   bool,
 	matches: [len(ITEMS)]model.Match,
@@ -38,6 +40,19 @@ rebuild :: proc(app: ^App) {
 	app.visible, _ = model.filter(ITEMS[:], app.query.text, app.matches[:])
 }
 
+THEME_JSON :: #load("theme.json")
+
+// register_theme installs this demo's dark palette (theme.json) so the catalog
+// preview reads on its dark frame; the window colour of the base theme does not.
+register_theme :: proc(app: ^App, rt: ^alicorn.Runtime) {
+	registration := theme.theme_json_register(rt, string(THEME_JSON), "theme.json")
+	defer theme.theme_json_register_result_destroy(&registration)
+	app.theme_id = registration.theme_id
+	if app.theme_id == 0 { fmt.println("demo theme registration failed:", registration.failure) }
+}
+
+initialize :: proc(app: ^App, rt: ^alicorn.Runtime) { register_theme(app, rt) }
+
 render :: proc(app: ^App, ctx: ^ui.UI) {
 	if !app.ready { return }
 	rebuild(app)
@@ -45,6 +60,12 @@ render :: proc(app: ^App, ctx: ^ui.UI) {
 		key=alicorn.key_string("palette-parts-example-root"),
 		style=alicorn.layout_style(.Column, width=-1, height=-1, grow=1, padding=24, gap=12),
 		color=ui.rgb(BACKDROP)) != 0 {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		_ = ui.text(ctx, "Palette Parts", size=26)
 		_ = ui.text(ctx, "The application owns the query and matching; AliKit owns the result list interaction.",
 			size=13, color=alicorn.style_color(ctx, .Muted_Text))
@@ -89,7 +110,7 @@ run :: proc() {
 		fmt.eprintln("Could not initialize the palette parts query buffer.")
 		return
 	}
-	ui.run(&app, render, title="AliKit Palette Parts", width=640, height=460, smoke=smoke)
+	ui.run(&app, render, on_initialize=initialize, title="AliKit Palette Parts", width=640, height=460, smoke=smoke)
 }
 
 // The base theme's window colour is a light lavender that the examples' light

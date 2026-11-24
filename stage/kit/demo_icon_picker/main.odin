@@ -11,12 +11,14 @@ package demo_icon_picker
 
 import "core:fmt"
 import alicorn "alicorn:runtime"
+import theme "alicorn:theme"
 import ui "alicorn:ui"
 import picker "alikit:icon_picker"
 
 Choice_Count :: 12
 
 App :: struct {
+	theme_id: alicorn.Style_Theme_ID,
 	icon: picker.State,
 	choices: [Choice_Count]picker.Choice,
 	appearance: picker.Appearance,
@@ -101,11 +103,28 @@ describe_picker :: proc(app: ^App, ctx: ^ui.UI) -> bool {
 	return true
 }
 
+THEME_JSON :: #load("theme.json")
+
+// register_theme installs this demo's dark palette (theme.json) so the catalog
+// preview reads on its dark frame; the window colour of the base theme does not.
+register_theme :: proc(app: ^App, rt: ^alicorn.Runtime) {
+	registration := theme.theme_json_register(rt, string(THEME_JSON), "theme.json")
+	defer theme.theme_json_register_result_destroy(&registration)
+	app.theme_id = registration.theme_id
+	if app.theme_id == 0 { fmt.println("demo theme registration failed:", registration.failure) }
+}
+
 render :: proc(app: ^App, ctx: ^ui.UI) {
 	if alicorn.container_begin(ctx, .Container, label="icon-picker-example-root",
 		key=alicorn.key_string("icon-picker-example-root"),
 		style=alicorn.layout_style(.Column, width=-1, height=-1, grow=1, padding=16, gap=8),
 		color=ui.rgb(BACKDROP)) != 0 {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		_ = ui.text(ctx, "AliKit · Icon Picker", size=24)
 		_ = ui.text(ctx,
 			"Search, rove with arrows, Enter selects. Ctrl+F focuses search from anywhere in the picker; Ctrl+2 switches appearances.",
@@ -142,6 +161,12 @@ render_overlays :: proc(app: ^App, ctx: ^ui.UI) {
 	)
 	app.overlay_node = overlay
 	if overlay == 0 { return }
+	// the dialog's colours go on inside the overlay: a push needs an open container
+	overlay_scope := alicorn.Style_Environment_Scope{}
+	if app.theme_id != 0 {
+		overlay_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+	}
+	defer if overlay_scope.active { alicorn.style_environment_pop(ctx, overlay_scope) }
 	if ui.panel(ctx, key=alicorn.key_string("example-icon-picker-dialog"), width=430,
 		height=alicorn.LAYOUT_SIZE_FIT_CONTENT, padding=16, gap=10) {
 		_ = alicorn.semantic_description(ctx, .Dialog, "Choose an icon",
@@ -226,6 +251,7 @@ on_pointer :: proc(app: ^App, rt: ^alicorn.Runtime, event: alicorn.Pointer_Event
 }
 
 initialize :: proc(app: ^App, rt: ^alicorn.Runtime) {
+	register_theme(app, rt)
 	if !picker.init(&app.icon) {
 		return
 	}

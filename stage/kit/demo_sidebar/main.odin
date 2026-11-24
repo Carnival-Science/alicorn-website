@@ -74,6 +74,12 @@ render :: proc(app: ^App, ctx: ^ui.UI) {
 		key=alicorn.key_string("sidebar-example-root"),
 		style=alicorn.layout_style(.Row, width=-1, height=-1, grow=1, padding=18, gap=18),
 		color=ui.rgb(BACKDROP)) != 0 {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		if ui.row(ctx, key=alicorn.key_string("sidebar-example-body"), width=-1, height=-1,
 			grow=1, gap=18) {
 		theme_scope := alicorn.Style_Environment_Scope{}

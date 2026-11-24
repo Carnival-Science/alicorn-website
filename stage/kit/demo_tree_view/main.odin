@@ -2,6 +2,7 @@ package demo_tree_view
 
 import "core:fmt"
 import alicorn "alicorn:runtime"
+import theme "alicorn:theme"
 import ui "alicorn:ui"
 import tree_view "alikit:tree_view"
 import model "alikit:tree_model"
@@ -15,6 +16,7 @@ SOURCE_ROWS :: [5]model.Item{
 }
 
 App :: struct {
+	theme_id: alicorn.Style_Theme_ID,
 	view:       tree_view.State,
 	expanded:   [5]bool,
 	rows:       [5]tree_view.Item,
@@ -74,11 +76,30 @@ apply_event :: proc(app: ^App, event: tree_view.Event) {
 	}
 }
 
+THEME_JSON :: #load("theme.json")
+
+// register_theme installs this demo's dark palette (theme.json) so the catalog
+// preview reads on its dark frame; the window colour of the base theme does not.
+register_theme :: proc(app: ^App, rt: ^alicorn.Runtime) {
+	registration := theme.theme_json_register(rt, string(THEME_JSON), "theme.json")
+	defer theme.theme_json_register_result_destroy(&registration)
+	app.theme_id = registration.theme_id
+	if app.theme_id == 0 { fmt.println("demo theme registration failed:", registration.failure) }
+}
+
+initialize :: proc(app: ^App, rt: ^alicorn.Runtime) { register_theme(app, rt) }
+
 render :: proc(app: ^App, ctx: ^ui.UI) {
 	if alicorn.container_begin(ctx, .Container, label="tree-example-root",
 		key=alicorn.key_string("tree-example-root"),
 		style=alicorn.layout_style(.Column, width=-1, height=-1, grow=1, padding=16, gap=8),
 		color=ui.rgb(BACKDROP)) != 0 {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		_ = ui.text(ctx, "AliKit · Tree View", size=24)
 		_ = ui.text(ctx, "Use Up/Down to move, Left/Right to collapse or expand, and Enter to activate.")
 		if app.last_item != 0 {
@@ -105,7 +126,7 @@ run :: proc() {
 	smoke := false
 	app = App{expanded={true, true, false, false, false}, revision=1}
 	rebuild_rows(&app)
-	ui.run(&app, render, title="AliKit Tree View", width=760, height=520, smoke=smoke)
+	ui.run(&app, render, on_initialize=initialize, title="AliKit Tree View", width=760, height=520, smoke=smoke)
 }
 
 // The base theme's window colour is a light lavender that the examples' light

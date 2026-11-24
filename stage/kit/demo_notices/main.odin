@@ -105,6 +105,12 @@ render :: proc(app: ^App, ctx: ^ui.UI) {
 		key=alicorn.key_string("notices-example-root"),
 		style=alicorn.layout_style(.Column, width=-1, height=-1, grow=1, padding=28, gap=16, align=.Center),
 		color=ui.rgb(BACKDROP)) != 0 {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		_ = ui.text(ctx, "Notices", size=26)
 		_ = ui.text(ctx, "Runtime toasts plus copyable inline card parts.",
 			size=13, color=alicorn.style_color(ctx, .Muted_Text))

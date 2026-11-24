@@ -160,6 +160,12 @@ less :: proc(app: ^App, left, right: data_grid.Row) -> bool {
 render :: proc(app: ^App, ctx: ^ui.UI) {
 	if ui.panel(ctx, fill=ui.rgb(BACKDROP), key=alicorn.key_string("table-example-root"), grow=1,
 		padding=24, gap=12) {
+		// style_environment_push needs an open container, so the palette goes on inside the root.
+		root_scope := alicorn.Style_Environment_Scope{}
+		if app.theme_id != 0 {
+			root_scope = alicorn.style_environment_push(ctx, alicorn.Style_Environment{theme=app.theme_id})
+		}
+		defer if root_scope.active { alicorn.style_environment_pop(ctx, root_scope) }
 		_ = ui.text(ctx, "Data Grid", size=26)
 		_ = ui.text(ctx, "Application-owned filtering and sorting; virtualized rows; nested table semantics.",
 			size=13, color=alicorn.style_color(ctx, .Muted_Text))

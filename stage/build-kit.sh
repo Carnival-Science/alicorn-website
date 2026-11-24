@@ -7,7 +7,7 @@
 # One wasm carries a demo for every catalog page; the page picks one by name.
 # The demos are the AliKit examples, so they build against the AliKit revision
 # in alikit-catalog.json and the Alicorn revision that AliKit pins in its
-# dependencies.lock.json. Both are read with `git archive`, so the checkouts
+# dependencies.lock.json (set ALICORN_REV to try another commit). Both are read with `git archive`, so the checkouts
 # you pass need those commits but can be on any branch. With no AliKit path it
 # is cloned from GitHub. Needs Odin, node and wasm-ld (LLVM's lld) on PATH.
 # The output is committed because CI does not build Odin.
@@ -38,7 +38,7 @@ if [ -z "$ALIKIT" ]; then
 fi
 mkdir "$WORK/kit" "$WORK/alicorn"
 git -C "$ALIKIT" archive "$KIT_REV" | tar -x -C "$WORK/kit"
-ALICORN_REV=$(node -p "require('$WORK/kit/dependencies.lock.json').alicorn.revision")
+ALICORN_REV=${ALICORN_REV:-$(node -p "require('$WORK/kit/dependencies.lock.json').alicorn.revision")}
 git -C "$ALICORN" archive "$ALICORN_REV" | tar -x -C "$WORK/alicorn"
 
 # Odin compiles *_test.odin files into ordinary builds, and some of them import

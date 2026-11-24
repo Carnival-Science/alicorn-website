@@ -1,0 +1,245 @@
+{
+  "schema": 1,
+  "contract": "0.2",
+  "extends": "alicorn.base",
+  "tokens": {
+    "search.window_background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.subtle_surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.editor_background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.text": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9574,
+          0.9629,
+          0.9701
+        ],
+        "alpha": 1
+      }
+    },
+    "search.muted_text": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.691,
+          0.7156,
+          0.7494
+        ],
+        "alpha": 1
+      }
+    },
+    "search.accent": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6797,
+          0.8024,
+          1.0
+        ],
+        "alpha": 1
+      }
+    },
+    "search.accent_hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6797,
+          0.8024,
+          1.0
+        ],
+        "alpha": 1
+      }
+    },
+    "search.accent_pressed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6797,
+          0.8024,
+          1.0
+        ],
+        "alpha": 1
+      }
+    },
+    "search.accent_text": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 1
+      }
+    },
+    "search.selection": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5142,
+          0.6286,
+          0.7668
+        ],
+        "alpha": 1
+      }
+    },
+    "search.focus": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.semantic_focus": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6797,
+          0.8024,
+          1.0
+        ],
+        "alpha": 1
+      }
+    },
+    "search.border": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.danger": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9737,
+          0.6938,
+          0.691
+        ],
+        "alpha": 1
+      }
+    },
+    "search.success": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5821,
+          0.8884,
+          0.7619
+        ],
+        "alpha": 1
+      }
+    },
+    "search.scrollbar_track": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3714,
+          0.4007,
+          0.4426
+        ],
+        "alpha": 1
+      }
+    },
+    "search.scrollbar_thumb": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5183,
+          0.5495,
+          0.5959
+        ],
+        "alpha": 1
+      }
+    }
+  },
+  "roles": {
+    "core": {
+      "window_background": "{search.window_background}",
+      "surface": "{search.surface}",
+      "subtle_surface": "{search.subtle_surface}",
+      "editor_background": "{search.editor_background}",
+      "text": "{search.text}",
+      "muted_text": "{search.muted_text}",
+      "accent": "{search.accent}",
+      "accent_hover": "{search.accent_hover}",
+      "accent_pressed": "{search.accent_pressed}",
+      "accent_text": "{search.accent_text}",
+      "selection": "{search.selection}",
+      "focus": "{search.focus}",
+      "semantic_focus": "{search.semantic_focus}",
+      "border": "{search.border}",
+      "danger": "{search.danger}",
+      "success": "{search.success}",
+      "scrollbar_track": "{search.scrollbar_track}",
+      "scrollbar_thumb": "{search.scrollbar_thumb}"
+    }
+  }
+}
